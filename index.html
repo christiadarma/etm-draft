@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nugget's News — Website Copy Draft</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Serif+Display&family=Inter:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0A0A0A;
+    --red: #CE1126;
+    --white: #F5F5F0;
+    --gray: #888;
+    --mid: #C0BDB5;
+    --muted: #A8A59D;
+    --surface: #141414;
+    --border: rgba(255,255,255,0.07);
+    --amber: #C8860A;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  .master-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    z-index: 100;
+    overflow-x: auto;
+    white-space: nowrap;
+    backdrop-filter: blur(8px);
+  }
+  .brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--red);
+    padding: 1rem 0;
+    margin-right: 2rem;
+    border-right: 1px solid var(--border);
+    padding-right: 2rem;
+    flex-shrink: 0;
+  }
+  .master-nav a {
+    display: inline-block;
+    padding: 1rem 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--gray);
+    border-bottom: 2px solid transparent;
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .master-nav a:hover { color: var(--white); }
+  .master-nav a.active { color: var(--white); border-bottom-color: var(--red); }
+
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HERO BAND */
+  .page-hero {
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .page-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--red);
+    margin-bottom: 0.75rem;
+  }
+  .page-hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .page-hero .intro {
+    font-size: 17px;
+    color: var(--mid);
+    line-height: 1.6;
+    max-width: 640px;
+  }
+  .page-hero .cta-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* CONTENT AREA */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--red);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+  h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
+  }
+  p:last-child { margin-bottom: 0; }
+
+  .lead {
+    font-size: 16px;
+    color: var(--mid);
+    line-height: 1.65;
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-block;
+    background: var(--red);
+    color: var(--white);
+    padding: 11px 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    border-radius: 3px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .btn-ghost {
+    display: inline-block;
+    color: var(--gray);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-decoration: underline;
+    text-decoration-color: rgba(136,136,136,0.35);
+    cursor: pointer;
+  }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 1.5rem;
+  }
+  .stat {
+    background: var(--black);
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat-n {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+  .stat-l {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+  }
+
+  /* PILLAR GRID */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 1.25rem;
+  }
+  .pillar {
+    background: var(--black);
+    padding: 1.25rem 1.5rem;
+  }
+  .pillar-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    margin-bottom: 0.6rem;
+  }
+  .pillar p { font-size: 13px; color: var(--gray); }
+
+  /* COURSE LIST */
+  .courses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 1.25rem;
+  }
+  .course {
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+  }
+  .course-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    margin-bottom: 0.5rem;
+  }
+  .course p { font-size: 13px; color: var(--gray); }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 1.25rem;
+  }
+  .pricing-card { background: var(--black); padding: 1.75rem; }
+  .pricing-card.featured { background: var(--surface); }
+  .pricing-tier {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+  }
+  .pricing-price {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .pricing-sub { font-size: 12px; color: var(--gray); margin-bottom: 1.25rem; }
+  .pricing-features { list-style: none; font-size: 13px; color: var(--gray); line-height: 2; }
+  .pricing-features li::before { content: '→ '; color: var(--red); }
+
+  /* BLANK / PENDING */
+  .pending {
+    display: inline-block;
+    background: rgba(200,134,10,0.07);
+    border: 1px dashed rgba(200,134,10,0.3);
+    color: rgba(200,134,10,0.6);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+  }
+  .pending-block {
+    background: rgba(200,134,10,0.04);
+    border: 1px dashed rgba(200,134,10,0.2);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    color: rgba(200,134,10,0.5);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    margin-top: 0.75rem;
+  }
+
+  /* FAQ */
+  .faq-item { border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
+  .faq-q { font-size: 15px; color: var(--white); font-weight: 500; margin-bottom: 0.6rem; }
+  .faq-a { font-size: 13px; color: var(--gray); line-height: 1.75; }
+
+  /* ABOUT PERSON */
+  .person {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1.5rem;
+  }
+  .avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--red);
+    flex-shrink: 0;
+  }
+  .person-name { font-size: 15px; font-weight: 500; color: var(--white); margin-bottom: 2px; }
+  .person-role {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    margin-bottom: 0.5rem;
+  }
+  .person p { font-size: 13px; color: var(--gray); }
+
+  /* QUESTIONS PAGE */
+  .q-intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--amber);
+    padding: 1.25rem 1.5rem;
+    border-radius: 3px;
+    margin: 2rem 0;
+  }
+  .q-intro p { color: var(--mid); font-size: 14px; }
+
+  .q-group-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    margin: 2.5rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .q-group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(200,134,10,0.15);
+  }
+
+  .q-item {
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 0;
+  }
+  .q-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    margin-bottom: 0.4rem;
+  }
+  .q-text {
+    font-size: 15px;
+    color: var(--white);
+    line-height: 1.5;
+    margin-bottom: 0.4rem;
+  }
+  .q-note { font-size: 12px; color: var(--gray); line-height: 1.6; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+  @media (max-width: 640px) {
+    .page-hero h1 { font-size: 30px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .courses { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .pillars { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="master-nav">
+  <span class="brand">NUGGET'S NEWS — DRAFT</span>
+  <a class="active" onclick="show('homepage', this)" href="#">Homepage</a>
+  <a onclick="show('benefits', this)" href="#">Benefits</a>
+  <a onclick="show('pricing', this)" href="#">Pricing</a>
+  <a onclick="show('about', this)" href="#">About</a>
+  <a onclick="show('faq', this)" href="#">FAQ</a>
+
+</nav>
+
+
+<!-- ═══════════════════ HOMEPAGE ═══════════════════ -->
+<div class="page active" id="homepage">
+
+  <div class="page-hero">
+    <div class="page-eyebrow">HOMEPAGE — nuggetsnews.com.au</div>
+    <h1>You already know something is wrong.</h1>
+    <p class="intro">Nugget's News is unfiltered coverage of the world as it actually is — and a practical roadmap for stepping outside it.</p>
+    <div class="cta-row">
+      <span class="btn">Join Escape The Matrix</span>
+      <span class="btn-ghost">Watch free on YouTube →</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="section">
+      <div class="eyebrow">BY THE NUMBERS</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">157K+</div><div class="stat-l">YOUTUBE SUBSCRIBERS</div></div>
+        <div class="stat"><div class="stat-n">770+</div><div class="stat-l">PAID MEMBERS</div></div>
+        <div class="stat"><div class="stat-n">14M+</div><div class="stat-l">TOTAL VIEWS</div></div>
+        <div class="stat"><div class="stat-n">1,000+</div><div class="stat-l">VIDEOS PUBLISHED</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="eyebrow">WHAT WE COVER</div>
+      <h2>Six things we go deep on.</h2>
+      <p class="lead">The world's problems are connected. So is our coverage.</p>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-label">WORLD NEWS &amp; POLITICAL CORRUPTION</div>
+          <p>The stories mainstream media ignores, misrepresents, or has an incentive not to cover.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-label">HEALTH &amp; MEDICAL FREEDOM</div>
+          <p>Independent research, bodily autonomy, and the conversations the medical establishment discourages.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-label">CRYPTO &amp; SOUND MONEY</div>
+          <p>Bitcoin, financial sovereignty, and the tools that exist outside the traditional banking system.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-label">PRIVACY &amp; DIGITAL SOVEREIGNTY</div>
+          <p>How to protect your data, reduce your digital footprint, and operate with less exposure.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-label">DECENTRALISED AI &amp; OPEN SOURCE TECH</div>
+          <p>AI and technology that you control — not the platforms and corporations that want to control it for you.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-label">OFF-GRID &amp; SELF-SUFFICIENCY</div>
+          <p>Practical independence — energy, food, land. Building a life that depends less on systems outside your control.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="eyebrow">ESCAPE THE MATRIX</div>
+      <h2>Ready to go further? That's what Escape The Matrix is for.</h2>
+      <p class="lead">Our private membership platform — structured courses, a private community, and direct access to Alex and the team.</p>
+      <p>Watching the YouTube channel is the beginning. Escape The Matrix is where you actually do something about it.</p>
+      <p>Inside: step-by-step courses on OpSec, privacy tools, decentralised AI, sound money, and more. A private community. And one-on-one access to Alex and the team for your specific situation.</p>
+      <div style="margin-top: 1.5rem;">
+        <span class="btn">See What's Inside →</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>The mainstream won't save you. But you can save yourself.</h2>
+      <p>Nugget's News gives you the information, the tools, and the community to build a life that doesn't depend on institutions that were never designed with your interests at heart.</p>
+      <div class="cta-row" style="margin-top: 1.25rem;">
+        <span class="btn">Join Escape The Matrix</span>
+        <span class="btn-ghost">Or start free — watch on YouTube →</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="eyebrow">FOOTER</div>
+      <p style="font-size: 13px;">© <span class="pending">2025 or 2026 — confirm</span> Nugget's News. All rights reserved. The content on this platform is for informational purposes only and does not constitute financial, medical, or legal advice. Always conduct your own research.</p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════ BENEFITS ═══════════════════ -->
+<div class="page" id="benefits">
+
+  <div class="page-hero">
+    <div class="page-eyebrow">BENEFITS — nuggetsnews.com.au/take-action</div>
+    <h1>Everything inside Escape The Matrix.</h1>
+    <p class="intro">One subscription. Courses, community, and direct access to Alex and the team.</p>
+  </div>
+
+  <div class="content">
+
+    <div class="section">
+      <p class="lead">Escape The Matrix is a private membership platform built around one question: how do you build a life that doesn't depend entirely on systems you don't control?</p>
+      <p>Inside, you'll find structured courses across every topic we cover, a private global community, and regular one-on-one access to Alex and the research team.</p>
+    </div>
+
+    <div class="section">
+      <div class="eyebrow">THE COURSE LIBRARY</div>
+      <h2>Step-by-step courses across every topic.</h2>
+      <p>Deep-dive, practical courses — from first principles. No technical background required.</p>
+
+      <div class="courses">
+        <div class="course">
+          <div class="course-name">OPSEC 101</div>
+          <p>Cookies, permissions, VPNs, browser hygiene, and reducing your digital footprint. How to operate with less exposure online.</p>
+        </div>
+        <div class="course">
+          <div class="course-name">PRIVACY TOOLS</div>
+          <p>The Proton suite — encrypted email, cloud storage, and calendar. The Payy crypto card. A practical privacy stack for everyday life.</p>
+        </div>
+        <div class="course">
+          <div class="course-name">SOUND MONEY &amp; CRYPTO</div>
+          <p>Bitcoin fundamentals, wallet security, running your own node. We also cover privacy-focused cryptocurrencies — ZEC (Zcash) and XMR (Monero) — for those who want deeper financial privacy.</p>
+        </div>
+        <div class="course">
+          <div class="course-name">DECENTRALISED AI</div>
+          <p>Self-hosting open-source language models including OpenClaw and Hermes. Training with Nous, Prime Intellect, and FortyTwo. Your AI, running on your hardware.</p>
+        </div>
+        <div class="course">
+          <div class="course-name">DECENTRALISED APPS</div>
+          <p>DeFi, DePIN, decentralised social media, storage, identity, and credentials. Beginner to advanced tutorials.</p>
+        </div>
+        <div class="course">
+          <div class="course-name">OFF-GRID &amp; SELF-SUFFICIENCY</div>
+          <p>Energy, food, water, land. The practical side of independence — how to start building it wherever you are.</p>
+        </div>
+        <div class="course">
+          <div class="course-name">HEALTH &amp; MEDICAL FREEDOM</div>
+          <p>Independent research, conversations with researchers outside the mainstream, and frameworks for making your own informed health decisions.</p>
+        </div>
+        <div class="course">
+          <div class="course-name">WORLD NEWS &amp; CORRUPTION</div>
+          <p>Context and frameworks for understanding events that mainstream media covers badly — or not at all.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="eyebrow">THE COMMUNITY</div>
+      <h2>Private. Global. Signal-only.</h2>
+      <p>A members-only community of people who are already taking steps toward greater independence. Ask questions, share what you're learning, and connect with people working on the same things.</p>
+      <div class="pending-block">Community platform name / description — pending Alex's input.</div>
+    </div>
+
+    <div class="section">
+      <div class="eyebrow">DIRECT ACCESS</div>
+      <h2>One-on-one with Alex and the team.</h2>
+      <p>Every membership includes access to scheduled one-on-one calls. Bring your specific questions — about your privacy setup, your financial situation, your plans. Real conversation, not a sales pitch.</p>
+      <div class="pending-block">Call structure details (who, frequency, booking) — pending Alex's input.</div>
+    </div>
+
+    <div class="section">
+      <h2>Ready to opt out?</h2>
+      <p>Join members from around the world already building lives that don't depend on institutions that don't have their best interests at heart.</p>
+      <div style="margin-top: 1.25rem;"><span class="btn">Join Escape The Matrix →</span></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════ PRICING ═══════════════════ -->
+<div class="page" id="pricing">
+
+  <div class="page-hero">
+    <div class="page-eyebrow">PRICING — nuggetsnews.com.au/sign-up-pricing</div>
+    <h1>One membership. Everything inside.</h1>
+    <p class="intro">Subscribe to the full Escape The Matrix platform — courses, community, and one-on-one access.</p>
+  </div>
+
+  <div class="content">
+
+    <div class="section">
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-tier">FREE</div>
+          <div class="pricing-price">$0</div>
+          <div class="pricing-sub">Always free</div>
+          <ul class="pricing-features">
+            <li>Full YouTube channel</li>
+            <li>Public podcast &amp; interviews</li>
+          </ul>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-tier">ESCAPE THE MATRIX</div>
+          <div class="pricing-price"><span class="pending">TBC</span></div>
+          <div class="pricing-sub"><span class="pending">Billing period — TBC</span></div>
+          <ul class="pricing-features">
+            <li>Full course library</li>
+            <li>Private members community</li>
+            <li>One-on-one calls</li>
+            <li>New courses included</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="pending-block">Cancellation policy — pending Alex's input.</div>
+      <div class="pending-block" style="margin-top: 1px;">Payment methods (including crypto options) — pending Alex's input.</div>
+    </div>
+
+    <div class="section">
+      <h2>The cost of not knowing is higher.</h2>
+      <div class="cta-row" style="margin-top: 1.25rem;">
+        <span class="btn">Join Escape The Matrix</span>
+        <span class="btn-ghost">Start free on YouTube →</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════ ABOUT ═══════════════════ -->
+<div class="page" id="about">
+
+  <div class="page-hero">
+    <div class="page-eyebrow">ABOUT — nuggetsnews.com.au/about</div>
+    <h1>Nugget's News is independent media. No script. No agenda.</h1>
+    <p class="intro">Unfiltered coverage of world news, political corruption, health, and investing — hosted by Alex Saunders.</p>
+  </div>
+
+  <div class="content">
+
+    <div class="section">
+      <div class="eyebrow">THE STORY</div>
+      <h2>Alex Saunders. Over a decade of asking the questions others won't.</h2>
+      <p>Alex Saunders — known as Nugget — is the founder and host of Nugget's News. He is an ex-pharmacist who has spent over a decade covering Bitcoin, privacy, freedom, and health.</p>
+      <p>Nugget's News has published more than 1,000 videos and reached over 14 million total views. Along the way, Alex has had more than 100 videos removed from YouTube — without a single explanation email from the platform.</p>
+      <div class="pending-block">Alex's story — in his own words. Whatever he'd like to share about the journey that brought Nugget's News to where it is today.</div>
+    </div>
+
+    <div class="section">
+      <div class="eyebrow">THE TEAM</div>
+      <h2>The people behind it.</h2>
+
+      <div class="person">
+        <div class="avatar">AS</div>
+        <div>
+          <div class="person-name">Alex Saunders</div>
+          <div class="person-role">FOUNDER &amp; HOST</div>
+          <p>Ex-pharmacist. Independent journalist. Bitcoin advocate. Founder of Nugget's News.</p>
+        </div>
+      </div>
+
+      <div class="pending-block">Additional team members — names, roles, and bios to be added once confirmed with Alex.</div>
+    </div>
+
+    <div class="section">
+      <h2>This is news for people who've stopped waiting.</h2>
+      <div class="cta-row" style="margin-top: 1.25rem;">
+        <span class="btn">Join Escape The Matrix</span>
+        <span class="btn-ghost">Watch free on YouTube →</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════ FAQ ═══════════════════ -->
+<div class="page" id="faq">
+
+  <div class="page-hero">
+    <div class="page-eyebrow">FAQ — nuggetsnews.com.au</div>
+    <h1>Got questions? Here are the honest answers.</h1>
+  </div>
+
+  <div class="content">
+    <div class="section">
+
+      <div class="faq-item">
+        <div class="faq-q">What is Escape The Matrix?</div>
+        <div class="faq-a">Escape The Matrix is the Nugget's News private membership platform. Your subscription gives you access to a structured course library, a private community, and one-on-one calls with Alex and the team.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">How is this different from the free YouTube channel?</div>
+        <div class="faq-a">The YouTube channel is where we publish our reporting — the news, interviews, and analysis. Escape The Matrix is the practitioner's layer: structured courses, a focused community, and direct access to bring your specific questions.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">What topics are covered in the courses?</div>
+        <div class="faq-a">The course library covers: OpSec and digital security, privacy tools, Bitcoin and sound money, privacy-focused cryptocurrencies, decentralised finance and applications, self-hosted AI, off-grid living and self-sufficiency, health and medical freedom, and world news and political corruption.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Do I need to be technical to use this?</div>
+        <div class="faq-a pending-block">Pending Alex's input — he'll know best how to set expectations on the technical level of each course.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">What does the one-on-one call include?</div>
+        <div class="faq-a pending-block">Pending Alex's input — call structure, who's on them, how to book.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Is this just about crypto?</div>
+        <div class="faq-a">No. Crypto and sound money are one category among several. Escape The Matrix covers digital privacy, decentralised AI, off-grid living, health freedom, and world news and political corruption. Crypto is a tool for financial sovereignty — but it's one piece of a much bigger picture.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Who is this for?</div>
+        <div class="faq-a">This is for people who are already questioning the mainstream narrative — on finance, health, media, technology, and government — and want to go further.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Is my data safe with Nugget's News?</div>
+        <div class="faq-a pending-block">Pending Alex's input — data and privacy policy details.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Can I cancel my subscription?</div>
+        <div class="faq-a pending-block">Pending Alex's input — cancellation terms.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Who is Alex Saunders?</div>
+        <div class="faq-a">Alex Saunders — known as Nugget — is the founder and host of Nugget's News. He is an ex-pharmacist who has spent over a decade covering Bitcoin, privacy, health, and freedom. Nugget's News has published more than 1,000 videos and reached more than 14 million views.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">How do I get started?</div>
+        <div class="faq-a">Click "Join Escape The Matrix" to see the current pricing and sign up. If you want to start free first, the YouTube channel is always open.</div>
+      </div>
+
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <span class="btn">Join Escape The Matrix</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="page" id="questions" style="display:none!important">
+
+  <div class="page-hero">
+    <div class="page-eyebrow" style="color: var(--amber);">QUESTIONS FOR ALEX</div>
+    <h1>A few things we'd love your input on.</h1>
+    <p class="intro">The copy draft is mostly done — these are the gaps that only you can fill. Answer as much or as little as you like on each one. Whatever you share gets shaped into copy. Whatever you skip stays as a placeholder until you're ready.</p>
+  </div>
+
+  <div class="content">
+
+    <div class="q-group-label">ABOUT YOU &amp; NUGGET'S NEWS</div>
+
+    <div class="q-item">
+      <div class="q-num">A1</div>
+      <div class="q-text">How would you describe the journey that brought Nugget's News to where it is today — in your own words, as much or as little as you want to share?</div>
+      <div class="q-note">This becomes the backbone of the About page. Whatever you write here gets turned directly into copy — in your voice, not ours.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">A2</div>
+      <div class="q-text">Is there anything about your background you'd like people to know — that gives context to why you cover the topics you do?</div>
+      <div class="q-note">Completely open — share whatever feels right.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">A3</div>
+      <div class="q-text">How would you describe Nugget's News to someone who's never heard of it — in a sentence or two, the way you'd say it in conversation?</div>
+      <div class="q-note">We want your natural language here. The best homepage copy usually comes from exactly how a founder talks about their own thing.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">A4</div>
+      <div class="q-text">Is there anything you'd like to make clear about how Nugget's News operates — editorially or otherwise — that you think visitors should know upfront?</div>
+      <div class="q-note">Only if it's something you want to say. Completely your call.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">A5</div>
+      <div class="q-text">Which team members would you like on the About page? Name, role, and a line or two about each — rough notes are fine, we'll shape them into copy.</div>
+    </div>
+
+    <div class="q-group-label">ESCAPE THE MATRIX — THE PRODUCT</div>
+
+    <div class="q-item">
+      <div class="q-num">P1</div>
+      <div class="q-text">How would you describe Escape The Matrix to a potential member in your own words — what is it, and what does someone actually get out of it day to day?</div>
+      <div class="q-note">Your answer here shapes the Benefits page intro and the homepage product section.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">P2</div>
+      <div class="q-text">For the one-on-one calls — what does that look like in practice? Who's on the call, how does a member book one, and what kinds of things do people typically bring to it?</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">P3</div>
+      <div class="q-text">Who is the ideal person joining Escape The Matrix — where are they in their journey, and what does the platform help them do?</div>
+      <div class="q-note">Your instinct on who you're building this for is more valuable than any audience description we could invent.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">P4</div>
+      <div class="q-text">Of the course topics listed across the draft — which ones are fully live at launch, and which are still being built? We'll handle "coming soon" items differently in the copy so we're not over-promising.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">P5</div>
+      <div class="q-text">Just checking the AI model names for the decentralised AI course — can you confirm the full list? We have OpenClaw, Hermes, Nous, Prime Intellect, and FortyTwo. Want to make sure spellings and inclusions are correct before they go on the site.</div>
+    </div>
+
+    <div class="q-group-label">PRICING</div>
+
+    <div class="q-item">
+      <div class="q-num">PR1</div>
+      <div class="q-text">What does the pricing structure look like — monthly, annual, or both? And is there anything free beyond the YouTube channel?</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">PR2</div>
+      <div class="q-text">What's the cancellation policy — and how would you like it worded on the site?</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">PR3</div>
+      <div class="q-text">Will the platform accept cryptocurrency as a payment option at launch? If so, which ones — and is that something worth highlighting on the pricing page?</div>
+    </div>
+
+    <div class="q-group-label">A FEW LINES TO APPROVE</div>
+
+    <div class="q-item">
+      <div class="q-num">B1</div>
+      <div class="q-text">The hero headline across the top of the site reads: "You already know something is wrong." Does this feel right as the first line a visitor reads — or would you put it differently?</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">B2</div>
+      <div class="q-text">The closing CTA at the bottom of each page reads: "The mainstream won't save you. But you can save yourself." Happy with this, or does it need adjusting?</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-num">B3</div>
+      <div class="q-text">Is "sovereignty" / "sovereign" language something you're comfortable using on the site? It's powerful with this audience but carries specific connotations in Australia — wanted to check before we commit to it.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+  function show(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.master-nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
