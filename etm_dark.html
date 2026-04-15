@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nugget's News — Website Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black:#060606; --red:#8C0F1A; --red-dim:rgba(140,15,26,0.16);
+  --white:#F7F4EE; --gray:#9A9690; --mid:#CBC7BE; --muted:#B0ACA4;
+  --surface:#131311; --surface2:#1D1D1A; --border:rgba(255,255,255,0.09);
+  --border2:rgba(255,255,255,0.15); --max:1280px;
+}
+html { scroll-behavior:smooth; }
+body { background:var(--black); color:var(--white); font-family:'Outfit',sans-serif; font-size:17px; line-height:1.75; overflow-x:hidden; }
+body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.4; }
+
+/* ENTRANCE ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes expandWidth { from{width:0} to{width:100%} }
+@keyframes counterPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes redPulse { 0%,100%{box-shadow:0 0 0 0 rgba(140,15,26,0)} 50%{box-shadow:0 0 24px 4px rgba(140,15,26,0.18)} }
+
+.hero-kicker { animation:fadeIn 0.6s ease both; }
+.hero h1 { animation:fadeUp 0.7s ease 0.1s both; }
+.hero-sub { animation:fadeUp 0.7s ease 0.25s both; }
+.hero-cta { animation:fadeUp 0.7s ease 0.4s both; }
+.hero-social-row { animation:fadeUp 0.7s ease 0.55s both; }
+.hero-right { animation:fadeIn 0.9s ease 0.3s both; }
+.intel-card { animation:heroFloat 6s ease-in-out 1s infinite; }
+.intel-live::before { animation:redPulse 1.2s ease-in-out infinite, blink 1.2s ease-in-out infinite; }
+.stat-n { animation:counterPulse 3s ease-in-out infinite; }
+
+.page-wrap { display:none; } .page-wrap.active { display:block; }
+.container { max-width:var(--max); margin:0 auto; padding:0 3rem; }
+.eyebrow { font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:0.15em; color:var(--red); text-transform:uppercase; margin-bottom:1.1rem; display:flex; align-items:center; gap:10px; }
+.eyebrow::before { content:''; display:inline-block; width:20px; height:1px; background:var(--red); }
+.btn-primary { display:inline-flex; align-items:center; gap:8px; background:var(--red); color:#fff; padding:18px 42px; font-family:'IBM Plex Mono',monospace; font-size:17px; letter-spacing:0.08em; text-transform:uppercase; border:none; cursor:pointer; transition:background 0.2s, transform 0.15s; text-decoration:none; }
+.btn-primary:hover { background:#6A0A14; transform:translateY(-1px); }
+.btn-ghost { display:inline-flex; align-items:center; gap:6px; color:var(--mid); font-family:'IBM Plex Mono',monospace; font-size:17px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; border-bottom:1px solid rgba(203,199,190,0.35); padding-bottom:2px; transition:color 0.2s; text-decoration:none; }
+.btn-ghost:hover { color:var(--white); }
+.btn-outline { display:inline-flex; align-items:center; gap:8px; border:1px solid var(--border2); color:var(--mid); padding:12px 24px; font-family:'IBM Plex Mono',monospace; font-size:16px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; transition:border-color 0.2s,color 0.2s; text-decoration:none; }
+.btn-outline:hover { border-color:var(--red); color:var(--white); }
+.pending-inline { display:inline-block; background:rgba(200,134,10,0.08); border:1px dashed rgba(200,134,10,0.35); color:rgba(200,134,10,0.7); font-family:'IBM Plex Mono',monospace; font-size:10px; padding:2px 8px; letter-spacing:0.06em; }
+.pending-block { background:rgba(200,134,10,0.04); border:1px dashed rgba(200,134,10,0.2); padding:1.25rem 1.5rem; color:rgba(200,134,10,0.55); font-family:'IBM Plex Mono',monospace; font-size:11px; line-height:1.7; margin-top:1rem; }
+.dev-note { background:rgba(53,130,200,0.06); border:1px dashed rgba(53,130,200,0.3); padding:1rem 1.25rem; color:rgba(100,170,230,0.8); font-family:'IBM Plex Mono',monospace; font-size:10px; line-height:1.7; margin-top:1rem; border-radius:2px; }
+
+/* ─ HEADER ─ */
+.site-header { position:sticky; top:0; z-index:200; background:rgba(8,8,8,0.96); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+.top-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:0.4rem 3rem; display:flex; align-items:center; justify-content:space-between; }
+.top-bar-left { font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.08em; color:var(--gray); }
+.top-bar-left span { color:var(--red); margin-right:0.5rem; }
+.social-links { display:flex; gap:4px; }
+.social-pill { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.06em; color:var(--gray); padding:5px 14px; border:1px solid var(--border); cursor:pointer; transition:color 0.15s,border-color 0.15s; text-decoration:none; display:inline-block; }
+.social-pill:hover { color:var(--white); border-color:var(--border2); }
+.main-nav { display:flex; align-items:center; justify-content:space-between; padding:0 3rem; height:64px; }
+.nav-logo { display:flex; align-items:center; gap:12px; cursor:pointer; text-decoration:none; }
+.logo-mark { width:36px; height:36px; background:var(--red); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:18px; color:#fff; font-style:italic; flex-shrink:0; }
+.logo-text { font-family:'Playfair Display',serif; font-size:17px; color:var(--white); line-height:1; }
+.logo-text span { display:block; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; color:var(--gray); margin-top:2px; }
+.nav-links { display:flex; align-items:center; }
+.nav-links a { font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.06em; text-transform:uppercase; color:var(--gray); padding:0 1.25rem; height:64px; display:flex; align-items:center; border-bottom:2px solid transparent; cursor:pointer; transition:color 0.15s,border-color 0.15s; text-decoration:none; }
+.nav-links a:hover,.nav-links a.active { color:var(--white); border-bottom-color:var(--red); }
+.nav-cta { display:flex; align-items:center; gap:1rem; }
+
+/* ─ HERO ─ */
+.hero { position:relative; min-height:88vh; display:flex; align-items:center; overflow:hidden; border-bottom:1px solid var(--border); }
+.hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse 65% 75% at 62% 45%,rgba(140,15,26,0.22) 0%,transparent 70%),radial-gradient(ellipse 45% 55% at 15% 75%,rgba(140,15,26,0.14) 0%,transparent 50%),radial-gradient(ellipse 35% 35% at 85% 15%,rgba(140,15,26,0.11) 0%,transparent 45%),var(--black); }
+.hero-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px); background-size:80px 80px; }
+.hero-content { position:relative; z-index:2; max-width:var(--max); margin:0 auto; padding:5rem 3rem; display:grid; grid-template-columns:1fr 420px; gap:5rem; align-items:center; width:100%; }
+.hero-kicker { font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.12em; color:var(--red); text-transform:uppercase; margin-bottom:1.75rem; display:flex; align-items:center; gap:12px; }
+.hero-kicker::before { content:''; width:30px; height:1px; background:var(--red); display:inline-block; }
+.hero h1 { font-family:'Playfair Display',serif; font-size:clamp(34px,4vw,64px); font-weight:700; color:var(--white); line-height:1.06; margin-bottom:1.5rem; letter-spacing:-0.02em; }
+.hero h1 em { font-style:italic; color:var(--red); }
+.hero-sub { font-size:21px; color:var(--white); opacity:0.88; line-height:1.6; max-width:560px; margin-bottom:2.5rem; }
+.hero-cta { display:flex; gap:1.25rem; align-items:center; flex-wrap:wrap; }
+.hero-card { background:var(--surface); border:1px solid var(--border2); padding:2rem; position:relative; }
+.hero-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:var(--red); }
+.hero-card-label { font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:0.12em; color:var(--red); text-transform:uppercase; margin-bottom:1.25rem; display:flex; align-items:center; gap:8px; }
+.hero-card-label::after { content:''; flex:1; height:1px; background:var(--border2); }
+.topic-list { list-style:none; }
+.topic-list li { display:flex; align-items:center; gap:10px; padding:0.7rem 0; border-bottom:1px solid var(--border); font-size:13px; color:var(--mid); font-family:'IBM Plex Mono',monospace; letter-spacing:0.04em; }
+.topic-list li:last-child { border-bottom:none; }
+.topic-dot { width:6px; height:6px; background:var(--red); flex-shrink:0; }
+.hero-stats { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); margin-top:1.5rem; }
+.hs { background:var(--surface2); padding:1rem; text-align:center; }
+.hs-n { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); line-height:1; margin-bottom:3px; }
+.hs-l { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.08em; color:var(--gray); }
+.hero-scroll { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.1em; color:var(--gray); }
+.scroll-line { width:1px; height:40px; background:linear-gradient(to bottom,var(--red),transparent); }
+
+/* ─ TICKER ─ */
+.ticker-bar { background:var(--red); padding:0.5rem 0; overflow:hidden; white-space:nowrap; }
+.ticker-inner { display:inline-flex; gap:4rem; animation:ticker 30s linear infinite; }
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ticker-item { font-family:'IBM Plex Mono',monospace; font-size:16px; letter-spacing:0.1em; color:rgba(255,255,255,0.95); text-transform:uppercase; }
+.ticker-item::before { content:'◆ '; opacity:0.6; }
+
+/* ─ STATS ─ */
+.stats-section { border-bottom:1px solid var(--border); background:var(--surface); }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); }
+.stat-cell { padding:2rem 2.5rem; border-right:1px solid var(--border); }
+.stat-cell:last-child { border-right:none; }
+.stat-n { font-family:'Playfair Display',serif; font-size:52px; font-weight:700; color:var(--white); line-height:1; margin-bottom:4px; }
+.stat-n sup { font-size:24px; color:var(--red); vertical-align:super; }
+.stat-l { font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.1em; color:var(--gray); text-transform:uppercase; }
+.stat-sub { font-size:14px; color:var(--muted); margin-top:4px; }
+
+/* ─ SECTIONS ─ */
+.section { padding:5rem 0; border-bottom:1px solid var(--border); }
+.section-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:2.5rem; gap:2rem; }
+.section-header h2 { font-family:'Playfair Display',serif; font-size:clamp(28px,3vw,40px); font-weight:700; color:var(--white); line-height:1.15; max-width:640px; }
+.section-header h2 em { font-style:italic; color:var(--red); }
+
+/* ─ PILLARS ─ */
+.pillars-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
+.pillar-card { background:var(--surface); padding:2rem; transition:background 0.2s; position:relative; overflow:hidden; }
+.pillar-card::after { content:''; position:absolute; bottom:0;left:0; width:0; height:2px; background:var(--red); transition:width 0.3s; }
+.pillar-card:hover { background:var(--surface2); }
+.pillar-card:hover::after { width:100%; }
+.pillar-number { font-family:'Playfair Display',serif; font-size:52px; color:rgba(140,15,26,0.12); line-height:1; margin-bottom:0.5rem; font-weight:700; }
+.pillar-name { font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.1em; color:var(--red); text-transform:uppercase; margin-bottom:0.75rem; }
+.pillar-desc { font-size:15px; color:var(--muted); line-height:1.7; }
+
+/* ─ VIDEO CARDS ─ */
+.video-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
+.video-card { background:var(--surface); transition:background 0.2s; text-decoration:none; display:block; }
+.video-card:hover { background:var(--surface2); }
+.video-thumb-wrap { width:100%; aspect-ratio:16/9; position:relative; overflow:hidden; display:block; }
+.video-thumb-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+.thumb-fallback { position:absolute; inset:0; background:linear-gradient(135deg,#1a1918 0%,#0e0e0d 100%); display:flex; align-items:center; justify-content:center; }
+.thumb-pattern { position:absolute; inset:0; background-image:linear-gradient(rgba(140,15,26,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(140,15,26,0.06) 1px,transparent 1px); background-size:30px 30px; }
+.play-overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0); transition:background 0.2s; }
+.video-card:hover .play-overlay { background:rgba(0,0,0,0.3); }
+.play-btn { width:48px; height:48px; background:var(--red); border-radius:50%; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s; }
+.video-card:hover .play-btn { opacity:1; }
+.play-btn::after { content:''; width:0; height:0; border-top:9px solid transparent; border-bottom:9px solid transparent; border-left:16px solid white; margin-left:3px; }
+.video-info { padding:1.25rem 1.25rem 1.5rem; }
+.video-tag { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.08em; color:var(--red); text-transform:uppercase; margin-bottom:0.5rem; }
+.video-title-text { font-size:16px; color:var(--white); font-weight:500; line-height:1.4; margin-bottom:0.5rem; min-height:40px; }
+.video-meta-row { font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--gray); letter-spacing:0.04em; }
+.video-all-row { text-align:center; padding:1.5rem; background:var(--black); border-top:1px solid var(--border); }
+
+/* ─ HERO SOCIAL ROW ─ */
+.hero-social-row { display:flex; align-items:center; gap:8px; margin-top:1.75rem; flex-wrap:wrap; }
+.hero-social-label { font-family:'IBM Plex Mono',monospace; font-size:16px; letter-spacing:0.1em; color:var(--gray); text-transform:uppercase; margin-right:6px; }
+.hero-social-pill { font-family:'IBM Plex Mono',monospace; font-size:16px; letter-spacing:0.05em; color:var(--mid); padding:9px 18px; border:1px solid var(--border2); cursor:pointer; text-decoration:none; display:inline-block; transition:color 0.15s,border-color 0.15s,background 0.15s; }
+.hero-social-pill:hover { color:var(--white); border-color:rgba(255,255,255,0.25); background:rgba(255,255,255,0.04); }
+
+/* ─ COMBINED VIDEO SECTION ─ */
+.video-combined { border:1px solid var(--border); background:var(--border); }
+.video-featured-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; }
+.video-divider { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; background:var(--surface2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.video-divider-label { font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:0.1em; color:var(--red); text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+.video-divider-label::before { content:''; width:16px; height:1px; background:var(--red); display:inline-block; }
+.video-divider-dot { width:6px; height:6px; background:var(--red); border-radius:50%; animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.latest-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); }
+.latest-loading { grid-column:1/-1; display:flex; align-items:center; justify-content:center; padding:2rem; }
+.loading-text { font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--gray); letter-spacing:0.08em; }
+.latest-card { background:var(--surface); text-decoration:none; display:block; transition:background 0.2s; }
+.latest-card:hover { background:var(--surface2); }
+.latest-thumb { width:100%; aspect-ratio:16/9; overflow:hidden; display:block; position:relative; }
+.latest-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.latest-info { padding:0.85rem 1rem; }
+.latest-title { font-size:11px; color:var(--white); font-weight:500; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.latest-date { font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--gray); margin-top:0.3rem; letter-spacing:0.04em; }
+.video-footer-row { display:flex; align-items:center; justify-content:center; padding:1.1rem; background:var(--black); border-top:1px solid var(--border); }
+
+/* ─ MATRIX ACCENTS ─ */
+@keyframes glitch {
+  0%,100%{clip-path:inset(0 0 98% 0);transform:translate(-2px,0)}
+  20%{clip-path:inset(30% 0 50% 0);transform:translate(2px,0)}
+  40%{clip-path:inset(70% 0 10% 0);transform:translate(-1px,0)}
+  60%{clip-path:inset(10% 0 80% 0);transform:translate(1px,0)}
+  80%{clip-path:inset(50% 0 30% 0);transform:translate(0,0)}
+}
+@keyframes scanline {
+  0%{top:0%} 100%{top:100%}
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes typewriter { from{width:0} to{width:100%} }
+
+.hero h1 { position:relative; }
+.hero h1::after {
+  content:attr(data-text);
+  position:absolute; left:0; top:0; width:100%; height:100%;
+  color:var(--red);
+  animation:glitch 4s infinite steps(1);
+  opacity:0.07;
+  pointer-events:none;
+}
+.manifesto-strip::after {
+  content:'';
+  position:absolute; left:0; right:0; top:0;
+  height:2px;
+  background:linear-gradient(90deg, transparent, rgba(140,15,26,0.6), transparent);
+  animation:scanline 3s linear infinite;
+  z-index:3;
+  pointer-events:none;
+}
+
+/* ─ INTEL CARD (hero right) ─ */
+.intel-card {
+  background:rgba(8,8,8,0.92);
+  border:1px solid rgba(140,15,26,0.35);
+  position:relative;
+  overflow:hidden;
+}
+.intel-card::before {
+  content:'';
+  position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(140,15,26,0.015) 2px, rgba(140,15,26,0.015) 4px);
+  pointer-events:none;
+  z-index:0;
+}
+.intel-card::after {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height:1px;
+  background:var(--red);
+}
+.intel-header {
+  position:relative;
+  z-index:1;
+  padding:0.75rem 1rem;
+  border-bottom:1px solid rgba(140,15,26,0.2);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(140,15,26,0.05);
+}
+.intel-label {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:16px;
+  letter-spacing:0.1em;
+  color:var(--red);
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.intel-live {
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:16px;
+  color:var(--red);
+  letter-spacing:0.08em;
+}
+.intel-live::before {
+  content:'';
+  width:7px; height:7px;
+  background:var(--red);
+  border-radius:50%;
+  animation:blink 1.2s ease-in-out infinite;
+}
+.intel-feed {
+  position:relative;
+  z-index:1;
+  list-style:none;
+}
+.intel-item {
+  padding:1rem 1.1rem;
+  border-bottom:1px solid rgba(140,15,26,0.1);
+  display:grid;
+  grid-template-columns:28px 1fr auto;
+  gap:10px;
+  align-items:start;
+  transition:background 0.15s;
+}
+.intel-item:hover { background:rgba(140,15,26,0.04); }
+.intel-item:last-child { border-bottom:none; }
+.intel-num {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:16px;
+  color:rgba(140,15,26,0.7);
+  padding-top:1px;
+}
+.intel-topic {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:19px;
+  color:var(--mid);
+  letter-spacing:0.01em;
+  line-height:1.5;
+}
+.intel-arrow {
+  font-size:17px;
+  color:rgba(140,15,26,0.6);
+  padding-top:1px;
+}
+.intel-footer {
+  position:relative;
+  z-index:1;
+  padding:0.85rem 1.1rem;
+  border-top:1px solid rgba(140,15,26,0.15);
+  background:rgba(140,15,26,0.03);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:15px;
+  color:rgba(140,15,26,0.65);
+  letter-spacing:0.08em;
+  display:flex;
+  justify-content:space-between;
+}
+
+/* ─ MATRIX WATERMARK ─ */
+.matrix-watermark {
+  position:absolute;
+  right:2rem; top:50%;
+  transform:translateY(-50%);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;
+  line-height:1.6;
+  color:rgba(140,15,26,0.06);
+  letter-spacing:0.05em;
+  pointer-events:none;
+  user-select:none;
+  white-space:pre;
+  z-index:1;
+}
+
+/* ─ REDACTED STYLE ─ */
+.redacted {
+  display:inline-block;
+  background:var(--red);
+  color:transparent;
+  border-radius:2px;
+  padding:0 4px;
+  user-select:none;
+}
+
+/* ─ PLATFORM PREVIEW (old NN style) ─ */
+.platform-preview {
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:4px;
+  overflow:hidden;
+  position:relative;
+}
+.platform-preview::before {
+  content:'';
+  position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px);
+  pointer-events:none;
+  z-index:10;
+}
+.platform-nav {
+  background:var(--black);
+  padding:0.6rem 1rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.platform-nav-logo {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-family:'Playfair Display',serif;
+  font-size:13px;
+  color:var(--white);
+}
+.platform-nav-mark {
+  width:20px; height:20px;
+  background:var(--red);
+  display:flex; align-items:center; justify-content:center;
+  font-style:italic;
+  font-size:12px;
+  color:#fff;
+}
+.platform-nav-links {
+  display:flex;
+  gap:16px;
+}
+.platform-nav-link {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8px;
+  letter-spacing:0.08em;
+  color:var(--gray);
+}
+.platform-nav-link.active { color:var(--red); }
+.platform-body {
+  padding:1.25rem;
+}
+.platform-welcome-bar {
+  background:var(--red-dim);
+  border:1px solid rgba(140,15,26,0.25);
+  border-left:3px solid var(--red);
+  padding:0.7rem 1rem;
+  margin-bottom:1rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.platform-welcome-text {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:var(--red);
+  letter-spacing:0.06em;
+}
+.platform-welcome-sub {
+  font-size:11px;
+  color:var(--mid);
+  margin-top:2px;
+}
+.platform-section-label {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8px;
+  letter-spacing:0.15em;
+  color:var(--gray);
+  text-transform:uppercase;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.platform-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.platform-courses {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin-bottom:1rem;
+}
+.platform-course-item {
+  background:var(--black);
+  border:1px solid var(--border);
+  padding:0.7rem 0.75rem;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border-radius:2px;
+}
+.platform-course-icon {
+  font-size:14px;
+  flex-shrink:0;
+}
+.platform-course-info { flex:1; min-width:0; }
+.platform-course-name {
+  font-size:10px;
+  color:var(--white);
+  font-weight:500;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.platform-course-status {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8px;
+  color:var(--gray);
+  margin-top:2px;
+  letter-spacing:0.05em;
+}
+.platform-progress-bar {
+  height:2px;
+  background:var(--border);
+  margin-top:4px;
+  border-radius:1px;
+  overflow:hidden;
+}
+.platform-progress-fill { height:100%; background:var(--red); border-radius:1px; }
+.platform-community-bar {
+  background:var(--black);
+  border:1px solid var(--border);
+  padding:0.7rem 1rem;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-radius:2px;
+}
+.platform-community-dots { display:flex; gap:4px; }
+.platform-community-dot { width:20px; height:20px; border-radius:50%; background:var(--surface2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:9px; }
+.platform-community-text { font-size:11px; color:var(--mid); }
+.platform-community-text strong { color:var(--white); font-weight:500; }
+.platform-cta-row { margin-top:1rem; display:flex; gap:6px; }
+.platform-btn-primary { flex:1; background:var(--red); color:#fff; text-align:center; padding:0.6rem; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.08em; }
+.platform-btn-ghost { flex:1; border:1px solid var(--border2); color:var(--gray); text-align:center; padding:0.6rem; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.08em; }
+
+/* ─ MANIFESTO STRIP ─ */
+.manifesto-strip { position:relative; overflow:hidden; border-bottom:1px solid var(--border); min-height:320px; display:flex; align-items:center; }
+.manifesto-bg { position:absolute; inset:0; background-image:url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1400&q=80'); background-size:cover; background-position:center; filter:brightness(0.25) saturate(0.4); }
+.manifesto-content { position:relative; z-index:2; max-width:var(--max); margin:0 auto; padding:4rem 3rem; }
+.manifesto-quote { font-family:'Playfair Display',serif; font-size:clamp(24px,3.5vw,42px); font-weight:400; font-style:italic; color:var(--white); line-height:1.3; max-width:800px; margin-bottom:1.25rem; }
+.manifesto-quote em { color:var(--red); font-style:italic; }
+.manifesto-attr { font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.12em; color:var(--gray); text-transform:uppercase; }
+
+/* ─ PLATFORM MOCKUP ─ */
+.platform-device { background:var(--surface2); border:1px solid var(--border2); border-radius:8px; overflow:hidden; box-shadow:0 0 60px rgba(140,15,26,0.08); }
+.device-bar { background:var(--black); padding:0.6rem 1rem; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.device-dot { width:8px; height:8px; border-radius:50%; }
+.device-dot-r { background:#8C0F1A; }
+.device-dot-y { background:#555; }
+.device-dot-g { background:#333; }
+.device-url { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:3px; padding:3px 10px; font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--gray); letter-spacing:0.04em; }
+.device-screen { display:grid; grid-template-columns:180px 1fr; min-height:300px; }
+.device-sidebar { background:var(--black); border-right:1px solid var(--border); padding:1rem 0; }
+.device-nav-item { padding:0.6rem 1rem; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--gray); letter-spacing:0.06em; display:flex; align-items:center; gap:8px; cursor:default; transition:background 0.15s; }
+.device-nav-item:hover { background:var(--surface); color:var(--white); }
+.device-nav-item.active { background:var(--red-dim); color:var(--red); border-right:2px solid var(--red); }
+.device-nav-dot { width:4px; height:4px; background:currentColor; border-radius:50%; }
+.device-main { padding:1.25rem; overflow:hidden; }
+.device-course-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.device-course-card { background:var(--black); border:1px solid var(--border); padding:0.85rem; border-radius:4px; }
+.device-course-tag { font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:0.1em; color:var(--red); margin-bottom:4px; }
+.device-course-name { font-size:11px; color:var(--white); font-weight:500; line-height:1.3; }
+.device-progress { height:2px; background:var(--border); border-radius:1px; margin-top:8px; }
+.device-progress-bar { height:100%; background:var(--red); border-radius:1px; }
+.device-welcome { background:var(--red-dim); border:1px solid rgba(140,15,26,0.2); border-radius:4px; padding:0.85rem; margin-bottom:10px; }
+.device-welcome-title { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.1em; color:var(--red); margin-bottom:4px; }
+.device-welcome-text { font-size:11px; color:var(--mid); }
+
+/* ─ IMAGE BANNER STRIP ─ */
+.img-banner { position:relative; overflow:hidden; height:280px; border-bottom:1px solid var(--border); border-top:1px solid var(--border); }
+.img-banner img { width:100%; height:100%; object-fit:cover; filter:brightness(0.3) saturate(0.5); }
+.img-banner-content { position:absolute; inset:0; display:flex; align-items:center; padding:0 3rem; max-width:var(--max); margin:0 auto; left:0; right:0; }
+.img-banner-text { font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,34px); font-style:italic; color:var(--white); max-width:640px; line-height:1.3; }
+.img-banner-text em { color:var(--red); }
+/* ─ CLASSIFIED PANEL ─ */
+.classified-panel{background:rgba(8,7,6,0.95);border:1px solid rgba(140,15,26,0.4);position:relative;overflow:hidden;}
+.cp-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(140,15,26,0.018) 2px,rgba(140,15,26,0.018) 4px);pointer-events:none;z-index:2;}
+.cp-progress-bar{height:2px;background:rgba(140,15,26,0.12);position:relative;overflow:hidden;}
+.cp-progress-fill{height:100%;background:var(--red);width:0%;transition:width 0.1s linear;}
+.cp-header{padding:12px 16px;border-bottom:1px solid rgba(140,15,26,0.2);display:flex;align-items:center;justify-content:space-between;background:rgba(140,15,26,0.07);position:relative;z-index:3;}
+.cp-header-left{display:flex;align-items:center;gap:10px;}
+.cp-live-dot{width:7px;height:7px;background:var(--red);border-radius:50%;animation:blink 1.4s ease-in-out infinite;}
+.cp-label{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.14em;color:var(--red);}
+.cp-file-id{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(140,15,26,0.5);letter-spacing:0.08em;}
+.cp-meta{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(140,15,26,0.12);border-bottom:1px solid rgba(140,15,26,0.15);position:relative;z-index:3;}
+.cp-meta-cell{background:rgba(8,7,6,0.97);padding:9px 16px;}
+.cp-meta-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:rgba(140,15,26,0.55);margin-bottom:3px;}
+.cp-meta-val{font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(244,241,236,0.7);}
+.cp-body{padding:18px 16px;position:relative;z-index:3;}
+.cp-line{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;min-height:24px;}
+.cp-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(140,15,26,0.45);min-width:20px;padding-top:2px;flex-shrink:0;}
+.cp-text{font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(244,241,236,0.82);line-height:1.55;flex:1;}
+.cp-divider{height:1px;background:rgba(140,15,26,0.12);margin:10px 0 12px;}
+@keyframes redactPulse{0%,100%{opacity:1}50%{opacity:0.55}}
+.cp-redact{display:inline;background:var(--red);color:transparent;user-select:none;border-radius:1px;position:relative;transition:all 0.45s ease;cursor:default;}
+.cp-redact.revealed{background:transparent !important;color:var(--red);font-style:italic;}
+.cp-final{opacity:0;transition:opacity 0.7s ease;}
+.cp-final.visible{opacity:1;}
+.cp-reveal-text{color:var(--red) !important;font-style:italic;}
+.cp-footer{padding:10px 16px;border-top:1px solid rgba(140,15,26,0.15);background:rgba(0,0,0,0.3);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:3;font-family:'IBM Plex Mono',monospace;font-size:11px;}
+#cp-big-stamp{font-size:16px;letter-spacing:0.25em;color:rgba(140,15,26,0.25);font-weight:500;transition:all 0.5s ease;}
+#cp-big-stamp.done{color:rgba(140,15,26,0.5);}
+.cp-footer span:last-child{color:rgba(140,15,26,0.4);font-size:11px;letter-spacing:0.08em;}
+
+/* ─ PILLAR IMAGE CARDS ─ */
+.pillar-img-card img { transition:transform 0.5s ease, filter 0.5s ease; }
+.pillar-img-card:hover img { transform:scale(1.06); filter:brightness(0.55) saturate(0.7) !important; }
+.pillar-img-card:hover .card-desc { opacity:1 !important; }
+.pillar-img-card::after { content:''; position:absolute; inset:0; border:1px solid transparent; transition:border-color 0.3s; pointer-events:none; }
+.pillar-img-card:hover::after { border-color:rgba(140,15,26,0.4); }
+
+.etm-section { padding:5rem 0; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+.etm-section::before { content:''; position:absolute; top:-100px;right:-100px; width:500px;height:500px; background:radial-gradient(circle,rgba(140,15,26,0.06) 0%,transparent 70%); pointer-events:none; }
+.etm-inner { max-width:var(--max); margin:0 auto; padding:0 3rem; display:grid; grid-template-columns:1fr 460px; gap:5rem; align-items:center; }
+.etm-left h2 { font-family:'Playfair Display',serif; font-size:clamp(30px,3.5vw,48px); font-weight:700; color:var(--white); line-height:1.1; margin-bottom:1.25rem; }
+.etm-left h2 em { font-style:italic; color:var(--red); }
+.etm-left p { font-size:17px; color:var(--muted); line-height:1.8; margin-bottom:0.75rem; }
+.etm-left p:last-of-type { margin-bottom:2rem; }
+.etm-panel { background:var(--surface); border:1px solid var(--border2); }
+.etm-panel-header { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.etm-panel-title { font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:0.1em; color:var(--red); text-transform:uppercase; }
+.etm-badge { font-family:'IBM Plex Mono',monospace; font-size:13px; background:var(--red-dim); border:1px solid rgba(140,15,26,0.3); color:var(--red); padding:4px 10px; letter-spacing:0.06em; }
+.etm-feature { display:flex; align-items:flex-start; gap:1rem; padding:1rem 1.5rem; border-bottom:1px solid var(--border); transition:background 0.15s; }
+.etm-feature:last-child { border-bottom:none; }
+.etm-feature:hover { background:var(--surface2); }
+.etm-icon { width:32px; height:32px; background:var(--red-dim); border:1px solid rgba(140,15,26,0.2); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; }
+.etm-feat-name { font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.04em; color:var(--white); margin-bottom:4px; }
+.etm-feat-desc { font-size:16px; color:var(--muted); }
+
+/* ─ SUPPORT ─ */
+.support-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); margin-top:2.5rem; }
+.support-card { background:var(--surface); padding:2.5rem; position:relative; }
+.support-badge { position:absolute; top:1.5rem; right:1.5rem; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.08em; padding:5px 12px; }
+.badge-once { color:var(--gray); border:1px solid var(--border2); }
+.badge-monthly { color:var(--red); border:1px solid rgba(140,15,26,0.3); background:var(--red-dim); }
+.support-name { font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:0.08em; color:var(--red); text-transform:uppercase; margin-bottom:0.75rem; }
+.support-card h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--white); margin-bottom:0.75rem; }
+.support-card p { font-size:16px; color:var(--muted); margin-bottom:1.5rem; }
+
+/* ─ CTA STRIP ─ */
+.cta-strip { padding:5rem 0; text-align:center; position:relative; overflow:hidden; }
+.cta-strip::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 100% at 50% 50%,rgba(140,15,26,0.06) 0%,transparent 70%); }
+.cta-strip h2 { font-family:'Playfair Display',serif; font-size:clamp(32px,4vw,54px); font-weight:700; color:var(--white); line-height:1.1; margin-bottom:1.25rem; position:relative; }
+.cta-strip h2 em { font-style:italic; color:var(--red); }
+.cta-strip p { font-size:18px; color:var(--muted); max-width:560px; margin:0 auto 2.5rem; position:relative; }
+.cta-row { display:flex; gap:1.25rem; align-items:center; justify-content:center; position:relative; flex-wrap:wrap; }
+
+/* ─ FOOTER ─ */
+.site-footer { background:var(--surface); border-top:1px solid var(--border); padding:3rem 0 2rem; }
+.footer-top { display:grid; grid-template-columns:280px 1fr 1fr 1fr; gap:3rem; padding-bottom:2rem; border-bottom:1px solid var(--border); margin-bottom:2rem; }
+.footer-brand p { font-size:15px; color:var(--muted); margin-top:1rem; line-height:1.6; }
+.footer-col-title { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.12em; color:var(--red); text-transform:uppercase; margin-bottom:1rem; }
+.footer-links { list-style:none; }
+.footer-links li { margin-bottom:0.5rem; }
+.footer-links a { font-size:15px; color:var(--muted); cursor:pointer; transition:color 0.15s; text-decoration:none; }
+.footer-links a:hover { color:var(--white); }
+.footer-bottom { display:flex; align-items:center; justify-content:space-between; gap:2rem; }
+.footer-copy { font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--gray); letter-spacing:0.04em; }
+.footer-disclaimer { font-size:15px; color:var(--gray); max-width:480px; line-height:1.6; }
+
+/* ─ INNER PAGES ─ */
+.inner-hero { padding:5rem 0 4rem; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+.inner-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 70% 50%, rgba(140,15,26,0.08) 0%, transparent 60%); }
+.inner-hero-img { position:absolute; inset:0; background-size:cover; background-position:center; opacity:0.15; }
+.inner-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(42px,5vw,70px); font-weight:700; color:var(--white); line-height:1.06; margin-bottom:1.25rem; max-width:800px; position:relative; }
+.inner-hero h1 em { font-style:italic; color:var(--red); }
+.inner-hero p { font-size:19px; color:var(--mid); max-width:580px; line-height:1.7; position:relative; }
+.inner-hero-content { position:relative; z-index:2; }
+.section h2 { font-family:'Playfair Display',serif; font-size:clamp(30px,3.5vw,46px); font-weight:700; color:var(--white); line-height:1.12; margin-bottom:1rem; }
+.section h2 em { font-style:italic; color:var(--red); }
+
+/* ─ MID-PAGE BANNER ─ */
+.mid-banner { position:relative; overflow:hidden; height:200px; margin:0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); display:flex; align-items:center; }
+.mid-banner-bg { position:absolute; inset:0; background-size:cover; background-position:center; filter:brightness(0.2) saturate(0.4); }
+.mid-banner-content { position:relative; z-index:2; padding:0 3rem; max-width:var(--max); margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; gap:3rem; }
+.mid-banner-text { font-family:'Playfair Display',serif; font-size:clamp(18px,2.5vw,28px); font-style:italic; color:var(--white); line-height:1.3; }
+.mid-banner-text em { color:var(--red); }
+
+/* ─ TIMELINE ─ */
+.timeline { position:relative; margin-top:2rem; }
+.timeline::before { content:''; position:absolute; left:0; top:0; bottom:0; width:1px; background:var(--border2); }
+.timeline-item { display:grid; grid-template-columns:120px 1fr; gap:2rem; padding:1.5rem 0 1.5rem 2rem; position:relative; border-bottom:1px solid var(--border); }
+.timeline-item:last-child { border-bottom:none; }
+.timeline-item::before { content:''; position:absolute; left:-4px; top:2rem; width:9px; height:9px; background:var(--red); border-radius:50%; box-shadow:0 0 0 3px rgba(140,15,26,0.2); }
+.timeline-year { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--red); line-height:1; }
+.timeline-label { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.08em; color:var(--gray); margin-top:2px; }
+.timeline-title { font-size:18px; color:var(--white); font-weight:500; margin-bottom:0.4rem; }
+.timeline-desc { font-size:15px; color:var(--muted); line-height:1.7; }
+
+/* ─ TRUST BAR ─ */
+.trust-bar { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:2rem 0; }
+.trust-bar-inner { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
+.trust-item { background:var(--surface); padding:1.5rem; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:0.5rem; }
+.trust-icon { font-size:24px; line-height:1; }
+.trust-label { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.1em; color:var(--red); text-transform:uppercase; }
+.trust-value { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); line-height:1; }
+.trust-sub { font-size:13px; color:var(--muted); }
+
+/* ─ CHANNEL STRIP (About) ─ */
+.channel-strip { background:var(--surface); border:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--border); margin-top:2rem; }
+.channel-cell { background:var(--surface); padding:1.5rem 2rem; }
+.channel-cell-label { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.1em; color:var(--red); text-transform:uppercase; margin-bottom:0.5rem; }
+.channel-cell-value { font-family:'Playfair Display',serif; font-size:32px; color:var(--white); line-height:1; }
+.channel-cell-sub { font-size:15px; color:var(--muted); margin-top:4px; }
+
+/* ─ FAQ VISUAL HEADER ─ */
+.faq-visual { position:relative; overflow:hidden; height:160px; border-bottom:1px solid var(--border); display:flex; align-items:center; }
+.faq-visual-bg { position:absolute; inset:0; background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80'); background-size:cover; background-position:center; filter:brightness(0.15) saturate(0.3); }
+.faq-visual-content { position:relative; z-index:2; padding:0 3rem; max-width:var(--max); margin:0 auto; width:100%; }
+.faq-visual-label { font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:0.15em; color:var(--red); margin-bottom:0.5rem; display:flex; align-items:center; gap:8px; }
+.faq-visual-label::before { content:''; width:16px; height:1px; background:var(--red); }
+
+@media(max-width:1024px){ .hero-content{grid-template-columns:1fr} .hero-right{display:none} .etm-inner{grid-template-columns:1fr} .footer-top{grid-template-columns:1fr 1fr} .about-grid{grid-template-columns:1fr} .courses-grid{grid-template-columns:repeat(2,1fr)} .pricing-wrapper{grid-template-columns:1fr} .latest-strip{grid-template-columns:repeat(2,1fr)} .trust-bar-inner{grid-template-columns:repeat(2,1fr)} .channel-strip{grid-template-columns:1fr 1fr} .mid-banner-content{flex-direction:column;align-items:flex-start} }
+@media(max-width:768px){ .container{padding:0 1.5rem} .main-nav{padding:0 1.5rem} .top-bar{padding:0.4rem 1.5rem} .hero-content{padding:3rem 1.5rem} .pillars-grid{grid-template-columns:1fr} .video-grid{grid-template-columns:1fr} .stats-grid{grid-template-columns:1fr 1fr} .benefit-blocks{grid-template-columns:1fr} .support-grid{grid-template-columns:1fr} .footer-top{grid-template-columns:1fr} .footer-bottom{flex-direction:column;align-items:flex-start} .nav-links{display:none} .courses-grid{grid-template-columns:1fr} .latest-strip{grid-template-columns:1fr} .social-links{display:none} .trust-bar-inner{grid-template-columns:1fr 1fr} .channel-strip{grid-template-columns:1fr} .timeline-item{grid-template-columns:80px 1fr;gap:1rem} .mid-banner-content{padding:0 1.5rem} .faq-visual-content{padding:0 1.5rem} }
+
+/* ─ BENEFIT BLOCKS ─ */
+.benefit-blocks { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:2rem; }
+.benefit-block { background:var(--surface); padding:2.5rem; position:relative; }
+.benefit-block::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:var(--border2); }
+.benefit-block:first-child::before { background:var(--red); }
+.benefit-num { font-family:'Playfair Display',serif; font-size:56px; font-weight:700; color:rgba(140,15,26,0.1); line-height:1; margin-bottom:1rem; }
+.benefit-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); margin-bottom:0.75rem; }
+.benefit-desc { font-size:16px; color:var(--muted); line-height:1.7; }
+
+/* ─ COURSES ─ */
+.courses-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:2rem; }
+.course-card { background:var(--surface); padding:1.5rem; transition:background 0.2s; }
+.course-card:hover { background:var(--surface2); }
+.course-icon { width:36px;height:36px; background:var(--red-dim); border:1px solid rgba(140,15,26,0.2); display:flex;align-items:center;justify-content:center; font-size:16px; margin-bottom:1rem; }
+.course-name { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.08em; color:var(--red); text-transform:uppercase; margin-bottom:0.5rem; }
+.course-desc { font-size:14px; color:var(--muted); line-height:1.65; }
+
+/* ─ PRICING ─ */
+.pricing-wrapper { display:grid; grid-template-columns:1fr 1.4fr; gap:1px; background:var(--border); border:1px solid var(--border); margin-top:2rem; }
+.pricing-tier-card { background:var(--surface); padding:2.5rem; }
+.pricing-tier-card.featured { background:var(--surface2); position:relative; }
+.pricing-tier-card.featured::before { content:'MOST POPULAR'; position:absolute; top:-1px;left:2.5rem; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.1em; background:var(--red); color:#fff; padding:5px 14px; }
+.tier-name { font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.1em; color:var(--gray); text-transform:uppercase; margin-bottom:1rem; }
+.tier-price { font-family:'Playfair Display',serif; font-size:52px; font-weight:700; color:var(--white); line-height:1; margin-bottom:0.25rem; }
+.tier-period { font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--gray); margin-bottom:2rem; letter-spacing:0.04em; }
+.tier-features { list-style:none; border-top:1px solid var(--border); padding-top:1.5rem; }
+.tier-features li { display:flex; align-items:flex-start; gap:10px; padding:0.6rem 0; font-size:16px; color:var(--mid); }
+.tier-features li::before { content:''; width:16px;height:16px; background:var(--red-dim); border:1px solid rgba(140,15,26,0.3); flex-shrink:0; margin-top:2px; background-image:url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1.5' stroke='%23CE1126' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center; }
+.tier-cta { margin-top:2rem; }
+
+/* ─ ABOUT ─ */
+.about-grid { display:grid; grid-template-columns:360px 1fr; gap:5rem; align-items:start; margin-top:2rem; }
+.about-photo { width:100%; aspect-ratio:3/4; background:var(--surface); border:1px solid var(--border2); position:relative; overflow:hidden; }
+.about-photo img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+.about-photo-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#1a1918,#0e0e0d); }
+.about-photo-fallback-pattern { position:absolute; inset:0; background-image:linear-gradient(rgba(140,15,26,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(140,15,26,0.04) 1px,transparent 1px); background-size:30px 30px; }
+.about-initials { font-family:'Playfair Display',serif; font-size:72px; font-style:italic; color:rgba(140,15,26,0.25); font-weight:700; position:relative; z-index:2; }
+.about-photo-caption { position:absolute; bottom:0;left:0;right:0; padding:1.5rem; background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%); }
+.about-photo-name { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); }
+.about-photo-role { font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.1em; color:var(--red); margin-top:2px; }
+.about-tag { background:var(--red); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.08em; padding:5px 14px; display:inline-block; margin-top:1rem; }
+.about-text h2 { margin-bottom:1.5rem; }
+.about-text p { font-size:15px; color:var(--muted); line-height:1.85; margin-bottom:1rem; }
+.about-text p strong { color:var(--white); font-weight:500; }
+.about-pull { border-left:3px solid var(--red); padding:1rem 1.5rem; margin:2rem 0; background:var(--surface); }
+.about-pull p { font-family:'Playfair Display',serif; font-size:17px; font-style:italic; color:var(--mid); margin:0; }
+
+/* ─ FAQ ─ */
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-q-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.5rem 0; cursor:pointer; }
+.faq-q-text { font-size:17px; color:var(--white); font-weight:500; }
+.faq-arrow { width:24px;height:24px; border:1px solid var(--border2); display:flex;align-items:center;justify-content:center; flex-shrink:0; font-size:12px; color:var(--red); transition:transform 0.2s; }
+.faq-answer { font-size:16px; color:var(--muted); line-height:1.8; padding-bottom:1.5rem; display:none; }
+.faq-item.open .faq-answer { display:block; }
+.faq-item.open .faq-arrow { transform:rotate(45deg); }
+
+@media(max-width:1024px){.hero-content{grid-template-columns:1fr}.hero-right{display:none}.etm-inner{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr 1fr}.about-grid{grid-template-columns:1fr}.courses-grid{grid-template-columns:repeat(2,1fr)}.pricing-wrapper{grid-template-columns:1fr}.latest-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.container{padding:0 1.5rem}.main-nav{padding:0 1.5rem}.top-bar{padding:0.4rem 1.5rem}.hero-content{padding:3rem 1.5rem}.pillars-grid{grid-template-columns:1fr}.video-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.benefit-blocks{grid-template-columns:1fr}.support-grid{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}.footer-bottom{flex-direction:column;align-items:flex-start}.nav-links{display:none}.courses-grid{grid-template-columns:1fr}.latest-grid{grid-template-columns:1fr}.social-links{display:none}}
+</style>
+</head>
+<body>
+
+<!-- GLOBAL HEADER -->
+<header class="site-header">
+  <div class="top-bar">
+    <div class="top-bar-left"><span>◆</span> Unfiltered coverage of world news, political corruption, health &amp; investing</div>
+  </div>
+  <nav class="main-nav">
+    <a class="nav-logo" href="https://nuggetsnews.com.au" target="_blank">
+      <div class="logo-mark">N</div>
+      <div class="logo-text">Nugget's News<span>INDEPENDENT MEDIA</span></div>
+    </a>
+    <div class="nav-links">
+      <a id="nav-home" class="active" onclick="showPage('home')">Home</a>
+      <a id="nav-benefits" onclick="showPage('benefits')">Escape The Matrix</a>
+      <a id="nav-pricing" onclick="showPage('pricing')">Support &amp; Pricing</a>
+      <a id="nav-about" onclick="showPage('about')">About</a>
+      <a id="nav-faq" onclick="showPage('faq')">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn-ghost" href="https://member.nuggetsnews.com.au/login/">Member Login</a>
+      <span class="btn-primary" onclick="showPage('pricing')">Join Now ↗</span>
+    </div>
+  </nav>
+</header>
+
+
+<!-- ═══════ HOMEPAGE ═══════ -->
+<div class="page-wrap active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-kicker">Independent Media Since 2012</div>
+        <h1 data-text="You already know something is wrong.">You already know <em>something</em> is wrong.</h1>
+        <p class="hero-sub">Nugget's News is unfiltered coverage of the world as it actually is — and a practical roadmap for stepping outside it.</p>
+        <div class="hero-cta">
+          <span class="btn-primary" onclick="showPage('benefits')">Join Escape The Matrix ↗</span>
+          <a class="btn-ghost" href="https://www.youtube.com/@NuggetsNews" target="_blank">Watch free on YouTube →</a>
+        </div>
+        <div class="hero-social-row">
+          <span class="hero-social-label">Follow</span>
+          <a class="hero-social-pill" href="https://www.youtube.com/@NuggetsNews" target="_blank">▶ YouTube</a>
+          <a class="hero-social-pill" href="https://x.com/NuggetsNewsAU" target="_blank">𝕏 Twitter</a>
+          <a class="hero-social-pill" href="https://www.facebook.com/nuggetsnews" target="_blank">f Facebook</a>
+          <a class="hero-social-pill" href="#" target="_blank">◎ Instagram</a>
+          <a class="hero-social-pill" href="#" target="_blank">◉ Podcast</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="classified-panel">
+          <div class="cp-scanlines"></div>
+          <div class="cp-progress-bar"><div class="cp-progress-fill" id="cp-prog"></div></div>
+          <div class="cp-header">
+            <div class="cp-header-left">
+              <div class="cp-live-dot"></div>
+              <span class="cp-label">CLASSIFIED — NN INTEL</span>
+            </div>
+            <span class="cp-file-id">FILE #NN-2012-001</span>
+          </div>
+          <div class="cp-meta">
+            <div class="cp-meta-cell"><div class="cp-meta-label">ORIGIN</div><div class="cp-meta-val">NUGGET'S NEWS</div></div>
+            <div class="cp-meta-cell"><div class="cp-meta-label">CLASSIFICATION</div><div class="cp-meta-val" id="cp-class">RESTRICTED</div></div>
+            <div class="cp-meta-cell"><div class="cp-meta-label">DATE</div><div class="cp-meta-val">EST. 2012</div></div>
+            <div class="cp-meta-cell"><div class="cp-meta-label">STATUS</div><div class="cp-meta-val" id="cp-status">DECLASSIFYING...</div></div>
+          </div>
+          <div class="cp-body">
+            <div class="cp-line"><span class="cp-num">01</span><span class="cp-text">The <span class="cp-redact" id="cpr1">banking system</span> was never designed to make you wealthy.</span></div>
+            <div class="cp-line"><span class="cp-num">02</span><span class="cp-text"><span class="cp-redact" id="cpr2">100+ videos removed</span> from YouTube. Zero explanation given.</span></div>
+            <div class="cp-divider"></div>
+            <div class="cp-line"><span class="cp-num">03</span><span class="cp-text">Your phone is a <span class="cp-redact" id="cpr3">surveillance device</span>. You paid for it.</span></div>
+            <div class="cp-line"><span class="cp-num">04</span><span class="cp-text"><span class="cp-redact" id="cpr4">Governments</span> are printing money. You are paying the price.</span></div>
+            <div class="cp-divider"></div>
+            <div class="cp-line"><span class="cp-num">05</span><span class="cp-text">There is an <span class="cp-redact" id="cpr5">exit</span>. Most people are never told about it.</span></div>
+            <div class="cp-line cp-final" id="cp-final"><span class="cp-num">→</span><span class="cp-text cp-reveal-text">Nugget's News has been reporting the exit since 2012.</span></div>
+          </div>
+          <div class="cp-footer">
+            <span id="cp-big-stamp">CLASSIFIED</span>
+            <span>nuggetsnews.com.au</span>
+          </div>
+        </div>
+        <div style="text-align:center;padding:8px 0 2px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;color:rgba(140,15,26,0.5);animation:blink 2s ease-in-out infinite;" id="cp-scroll-hint">↓ scroll to declassify</div>
+      </div>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+  </section>
+
+  <div class="ticker-bar">
+    <div class="ticker-inner">
+      <span class="ticker-item">The media won't tell you this</span>
+      <span class="ticker-item">Your data is being harvested right now</span>
+      <span class="ticker-item">Bitcoin was never just about money</span>
+      <span class="ticker-item">You can run your own AI — on your own hardware</span>
+      <span class="ticker-item">Food, energy, water — own them yourself</span>
+      <span class="ticker-item">The health system is not designed for your health</span>
+      <span class="ticker-item">The media won't tell you this</span>
+      <span class="ticker-item">Your data is being harvested right now</span>
+      <span class="ticker-item">Bitcoin was never just about money</span>
+      <span class="ticker-item">You can run your own AI — on your own hardware</span>
+      <span class="ticker-item">Food, energy, water — own them yourself</span>
+      <span class="ticker-item">The health system is not designed for your health</span>
+    </div>
+  </div>
+
+  <div class="stats-section">
+    <div class="stats-grid container">
+      <div class="stat-cell"><div class="stat-n">400K<sup>+</sup></div><div class="stat-l">Followers Across All Platforms</div></div>
+      <div class="stat-cell"><div class="stat-n">700<sup>+</sup></div><div class="stat-l">Paid Members</div><div class="stat-sub">Escape The Matrix</div></div>
+      <div class="stat-cell"><div class="stat-n">14M<sup>+</sup></div><div class="stat-l">Total Views</div></div>
+      <div class="stat-cell"><div class="stat-n">1K<sup>+</sup></div><div class="stat-l">Videos Published</div><div class="stat-sub">Since 2017</div></div>
+    </div>
+  </div>
+
+  <!-- MANIFESTO STRIP -->
+  <div class="manifesto-strip">
+    <div class="manifesto-bg"></div>
+    <div class="matrix-watermark">01001110 01010101 01000111 01000111&#10;01000101 01010100 01010011 00100000&#10;01001110 01000101 01010111 01010011&#10;00100000 01000101 01010011 01000011</div>
+    <div class="manifesto-content">
+      <div class="manifesto-quote">"The information you need is out there.<br>The system just doesn't want you to <em>find it.</em>"</div>
+      <div class="manifesto-attr">— Nugget's News &nbsp;·&nbsp; Independent since 2012</div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div><div class="eyebrow">What We Cover</div><h2>Six things we go deep on — <em>and it's all connected.</em></h2></div>
+        <span class="btn-ghost" onclick="showPage('benefits')">See all courses →</span>
+      </div>
+      <!-- IMAGE-BACKED EDITORIAL CARDS -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);">
+
+        <!-- 01 World News -->
+        <a onclick="showPage('benefits')" style="cursor:pointer;display:block;position:relative;overflow:hidden;aspect-ratio:4/3;text-decoration:none;" class="pillar-img-card">
+          <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=700&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease,filter 0.5s ease;filter:brightness(0.35) saturate(0.5);">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,6,0.95) 0%,rgba(6,6,6,0.2) 60%,transparent 100%);"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--red);margin-bottom:0.5rem;">01</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--white);line-height:1.2;margin-bottom:0.5rem;">World News &amp; Political Corruption</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.5;opacity:0;transition:opacity 0.3s;" class="card-desc">The stories mainstream media ignores, misrepresents, or has a financial incentive not to cover.</div>
+          </div>
+        </a>
+
+        <!-- 02 Health -->
+        <a onclick="showPage('benefits')" style="cursor:pointer;display:block;position:relative;overflow:hidden;aspect-ratio:4/3;text-decoration:none;" class="pillar-img-card">
+          <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=700&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease,filter 0.5s ease;filter:brightness(0.35) saturate(0.5);">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,6,0.95) 0%,rgba(6,6,6,0.2) 60%,transparent 100%);"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--red);margin-bottom:0.5rem;">02</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--white);line-height:1.2;margin-bottom:0.5rem;">Health &amp; Medical Freedom</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.5;opacity:0;transition:opacity 0.3s;" class="card-desc">Independent research, bodily autonomy, and the conversations the medical establishment discourages.</div>
+          </div>
+        </a>
+
+        <!-- 03 Crypto -->
+        <a onclick="showPage('benefits')" style="cursor:pointer;display:block;position:relative;overflow:hidden;aspect-ratio:4/3;text-decoration:none;" class="pillar-img-card">
+          <img src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d?auto=format&fit=crop&w=700&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease,filter 0.5s ease;filter:brightness(0.35) saturate(0.5);">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,6,0.95) 0%,rgba(6,6,6,0.2) 60%,transparent 100%);"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--red);margin-bottom:0.5rem;">03</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--white);line-height:1.2;margin-bottom:0.5rem;">Crypto &amp; Sound Money</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.5;opacity:0;transition:opacity 0.3s;" class="card-desc">Bitcoin, financial sovereignty, and the tools that exist outside the traditional banking system.</div>
+          </div>
+        </a>
+
+        <!-- 04 Privacy -->
+        <a onclick="showPage('benefits')" style="cursor:pointer;display:block;position:relative;overflow:hidden;aspect-ratio:4/3;text-decoration:none;" class="pillar-img-card">
+          <img src="https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?auto=format&fit=crop&w=700&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease,filter 0.5s ease;filter:brightness(0.35) saturate(0.5);">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,6,0.95) 0%,rgba(6,6,6,0.2) 60%,transparent 100%);"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--red);margin-bottom:0.5rem;">04</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--white);line-height:1.2;margin-bottom:0.5rem;">Privacy &amp; Digital Sovereignty</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.5;opacity:0;transition:opacity 0.3s;" class="card-desc">How to protect your data, reduce your digital footprint, and operate with less exposure.</div>
+          </div>
+        </a>
+
+        <!-- 05 Decentralised AI -->
+        <a onclick="showPage('benefits')" style="cursor:pointer;display:block;position:relative;overflow:hidden;aspect-ratio:4/3;text-decoration:none;" class="pillar-img-card">
+          <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&w=700&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease,filter 0.5s ease;filter:brightness(0.35) saturate(0.5);">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,6,0.95) 0%,rgba(6,6,6,0.2) 60%,transparent 100%);"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--red);margin-bottom:0.5rem;">05</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--white);line-height:1.2;margin-bottom:0.5rem;">Decentralised AI &amp; Open Source</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.5;opacity:0;transition:opacity 0.3s;" class="card-desc">AI you control, running on your hardware. No Big Tech. No terms of service that can silence you.</div>
+          </div>
+        </a>
+
+        <!-- 06 Off-Grid -->
+        <a onclick="showPage('benefits')" style="cursor:pointer;display:block;position:relative;overflow:hidden;aspect-ratio:4/3;text-decoration:none;" class="pillar-img-card">
+          <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease,filter 0.5s ease;filter:brightness(0.35) saturate(0.5);">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,6,0.95) 0%,rgba(6,6,6,0.2) 60%,transparent 100%);"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--red);margin-bottom:0.5rem;">06</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--white);line-height:1.2;margin-bottom:0.5rem;">Off-Grid &amp; Self-Sufficiency</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.5;opacity:0;transition:opacity 0.3s;" class="card-desc">Energy, food, land. The practical side of independence — and how to start wherever you are.</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COMBINED VIDEO SECTION — featured + auto-latest -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div><div class="eyebrow">Watch</div><h2>From Nugget's News — <em>featured &amp; latest.</em></h2></div>
+        <a class="btn-ghost" href="https://www.youtube.com/@NuggetsNews" target="_blank">View all on YouTube →</a>
+      </div>
+      <div class="video-combined">
+
+        <!-- FEATURED ROW — 3 pinned picks -->
+        <div class="video-featured-row">
+          <a class="video-card" href="https://youtu.be/afCuMV7y1uo" target="_blank">
+            <div class="video-thumb-wrap"><img src="https://img.youtube.com/vi/afCuMV7y1uo/maxresdefault.jpg" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="thumb-fallback" style="display:none;"><div class="thumb-pattern"></div></div><div class="play-overlay"><div class="play-btn"></div></div></div>
+            <div class="video-info"><div class="video-tag">Featured</div><div class="video-title-text" id="title-1">Loading...</div><div class="video-meta-row">NUGGET'S NEWS · YOUTUBE</div></div>
+          </a>
+          <a class="video-card" href="https://youtu.be/GwkFV__vs04" target="_blank">
+            <div class="video-thumb-wrap"><img src="https://img.youtube.com/vi/GwkFV__vs04/maxresdefault.jpg" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="thumb-fallback" style="display:none;"><div class="thumb-pattern"></div></div><div class="play-overlay"><div class="play-btn"></div></div></div>
+            <div class="video-info"><div class="video-tag">Featured</div><div class="video-title-text" id="title-2">Loading...</div><div class="video-meta-row">NUGGET'S NEWS · YOUTUBE</div></div>
+          </a>
+          <a class="video-card" href="https://youtu.be/ZZCXY9J3S5g" target="_blank">
+            <div class="video-thumb-wrap"><img src="https://img.youtube.com/vi/ZZCXY9J3S5g/maxresdefault.jpg" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="thumb-fallback" style="display:none;"><div class="thumb-pattern"></div></div><div class="play-overlay"><div class="play-btn"></div></div></div>
+            <div class="video-info"><div class="video-tag">Featured</div><div class="video-title-text" id="title-3">Loading...</div><div class="video-meta-row">NUGGET'S NEWS · YOUTUBE</div></div>
+          </a>
+        </div>
+
+        <!-- DIVIDER — separates featured from latest -->
+        <div class="video-divider">
+          <div class="video-divider-label"><div class="video-divider-dot"></div>Latest Episodes — updated automatically</div>
+          <div class="dev-note" style="margin:0;padding:0.4rem 0.75rem;font-size:9px;">⚙ Web dev: swap channel ID in script to activate RSS feed</div>
+        </div>
+
+        <!-- LATEST STRIP — 4 auto-updated via RSS -->
+        <div class="latest-strip" id="latest-videos">
+          <div class="latest-loading"><span class="loading-text">Loading latest episodes...</span></div>
+        </div>
+
+        <div class="video-footer-row">
+          <a class="btn-ghost" href="https://www.youtube.com/@NuggetsNews" target="_blank">View all 1,000+ videos on YouTube →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="etm-section">
+    <div class="etm-inner">
+      <div class="etm-left">
+        <div class="eyebrow">Escape The Matrix</div>
+        <h2>Ready to go further?<br><em>That's what Escape The Matrix is for.</em></h2>
+        <p>Watching the YouTube channel is the beginning. Escape The Matrix is where you actually do something about it.</p>
+        <p>Inside the members platform: deep-dive courses, a private global community, and direct access to Alex and the team — all in one place.</p>
+        <ul style="list-style:none;margin:1.25rem 0 1.75rem;display:flex;flex-direction:column;gap:0.6rem;">
+          <li style="display:flex;align-items:center;gap:10px;font-size:17px;color:var(--mid);"><span style="width:16px;height:16px;background:var(--red-dim);border:1px solid rgba(140,15,26,0.3);display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--red);flex-shrink:0;">✓</span>Growing course library — new topics added regularly</li>
+          <li style="display:flex;align-items:center;gap:10px;font-size:17px;color:var(--mid);"><span style="width:16px;height:16px;background:var(--red-dim);border:1px solid rgba(140,15,26,0.3);display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--red);flex-shrink:0;">✓</span>Private members-only community</li>
+          <li style="display:flex;align-items:center;gap:10px;font-size:17px;color:var(--mid);"><span style="width:16px;height:16px;background:var(--red-dim);border:1px solid rgba(140,15,26,0.3);display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--red);flex-shrink:0;">✓</span>One-on-one calls with Alex &amp; the team</li>
+          <li style="display:flex;align-items:center;gap:10px;font-size:17px;color:var(--mid);"><span style="width:16px;height:16px;background:var(--red-dim);border:1px solid rgba(140,15,26,0.3);display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--red);flex-shrink:0;">✓</span>All future course drops included</li>
+        </ul>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <span class="btn-primary" onclick="showPage('benefits')">See What's Inside ↗</span>
+          <span class="btn-outline" onclick="showPage('pricing')">View Pricing</span>
+        </div>
+      </div>
+
+      <!-- PLATFORM PREVIEW — styled like old NN site -->
+      <div class="platform-preview">
+        <div class="platform-nav">
+          <div class="platform-nav-logo">
+            <div class="platform-nav-mark">N</div>
+            Escape The Matrix
+          </div>
+          <div class="platform-nav-links">
+            <span class="platform-nav-link active">Dashboard</span>
+            <span class="platform-nav-link">Courses</span>
+            <span class="platform-nav-link">Community</span>
+            <span class="platform-nav-link">Calls</span>
+          </div>
+        </div>
+        <div class="platform-body">
+          <div class="platform-welcome-bar">
+            <div>
+              <div class="platform-welcome-text">◈ WELCOME BACK, MEMBER</div>
+              <div class="platform-welcome-sub">Continue: OpSec 101 — Module 3: VPN Setup</div>
+            </div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;background:var(--red);color:#fff;padding:4px 10px;letter-spacing:0.08em;">RESUME →</span>
+          </div>
+
+          <div class="platform-section-label">YOUR COURSES</div>
+          <div class="platform-courses">
+            <div class="platform-course-item">
+              <div class="platform-course-icon">🛡</div>
+              <div class="platform-course-info">
+                <div class="platform-course-name">OpSec 101</div>
+                <div class="platform-course-status">IN PROGRESS — 60%</div>
+                <div class="platform-progress-bar"><div class="platform-progress-fill" style="width:60%"></div></div>
+              </div>
+            </div>
+            <div class="platform-course-item">
+              <div class="platform-course-icon">🔐</div>
+              <div class="platform-course-info">
+                <div class="platform-course-name">Privacy Tools</div>
+                <div class="platform-course-status">NOT STARTED</div>
+                <div class="platform-progress-bar"><div class="platform-progress-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="platform-course-item">
+              <div class="platform-course-icon">₿</div>
+              <div class="platform-course-info">
+                <div class="platform-course-name">Sound Money</div>
+                <div class="platform-course-status">NOT STARTED</div>
+                <div class="platform-progress-bar"><div class="platform-progress-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="platform-course-item">
+              <div class="platform-course-icon">🤖</div>
+              <div class="platform-course-info">
+                <div class="platform-course-name">Decentralised AI</div>
+                <div class="platform-course-status">NOT STARTED</div>
+                <div class="platform-progress-bar"><div class="platform-progress-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="platform-section-label" style="margin-top:0.75rem;">COMMUNITY</div>
+          <div class="platform-community-bar">
+            <div class="platform-community-dots">
+              <div class="platform-community-dot">👤</div>
+              <div class="platform-community-dot">👤</div>
+              <div class="platform-community-dot">👤</div>
+              <div class="platform-community-dot" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--gray);">+</div>
+            </div>
+            <div class="platform-community-text"><strong>700+ members</strong> online globally — join the conversation</div>
+          </div>
+
+          <div class="platform-cta-row">
+            <div class="platform-btn-primary">Schedule a Call</div>
+            <div class="platform-btn-ghost">Browse All Courses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE BANNER -->
+  <div class="img-banner">
+    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1400&q=80" alt="">
+    <div class="img-banner-content">
+      <div class="img-banner-text">Independent reporting. No corporate backing. No editorial gatekeepers. Just <em>the truth.</em></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="eyebrow">Support &amp; Access</div>
+      <h2>Four ways to be part of <em>Nugget's News.</em></h2>
+      <p style="font-size:17px;color:var(--muted);max-width:600px;margin-top:0.5rem 0 0;">No corporate funding. No advertisers with strings attached. Choose however you want to engage — from free to fully in.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:2rem;">
+
+        <!-- FREE -->
+        <div style="background:var(--surface);padding:2rem 1.75rem;position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.1em;color:var(--gray);text-transform:uppercase;margin-bottom:0.75rem;">Free</div>
+          <div style="font-family:'Playfair Display',serif;font-size:36px;color:var(--white);line-height:1;margin-bottom:0.25rem;">$0</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gray);margin-bottom:1.5rem;">Always</div>
+          <ul style="list-style:none;font-size:15px;color:var(--muted);line-height:2.1;margin-bottom:1.75rem;">
+            <li>Full YouTube channel</li>
+            <li>Public podcast &amp; interviews</li>
+            <li>Free newsletter</li>
+          </ul>
+          <a class="btn-outline" href="https://www.youtube.com/@NuggetsNews" target="_blank" style="width:100%;justify-content:center;">Watch free →</a>
+        </div>
+
+        <!-- BUY ME A COFFEE -->
+        <div style="background:var(--surface);padding:2rem 1.75rem;position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.1em;color:var(--gray);text-transform:uppercase;margin-bottom:0.75rem;">One-off</div>
+          <div style="font-family:'Playfair Display',serif;font-size:36px;color:var(--white);line-height:1;margin-bottom:0.25rem;">Coffee</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gray);margin-bottom:1.5rem;">Buy Me a Coffee</div>
+          <ul style="list-style:none;font-size:15px;color:var(--muted);line-height:2.1;margin-bottom:1.75rem;">
+            <li>One-time contribution</li>
+            <li>Show your appreciation</li>
+            <li>Keep independent media alive</li>
+          </ul>
+          <a class="btn-outline" href="#" target="_blank" style="width:100%;justify-content:center;"><span class="pending-inline">Link TBC</span></a>
+        </div>
+
+        <!-- PATREON -->
+        <div style="background:var(--surface);padding:2rem 1.75rem;position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.1em;color:var(--gray);text-transform:uppercase;margin-bottom:0.75rem;">Monthly</div>
+          <div style="font-family:'Playfair Display',serif;font-size:36px;color:var(--white);line-height:1;margin-bottom:0.25rem;">Patreon</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gray);margin-bottom:1.5rem;">Patreon</div>
+          <ul style="list-style:none;font-size:15px;color:var(--muted);line-height:2.1;margin-bottom:1.75rem;">
+            <li>Recurring monthly support</li>
+            <li>Early access to content</li>
+            <li>Direct connection with Alex</li>
+          </ul>
+          <a class="btn-outline" href="#" target="_blank" style="width:100%;justify-content:center;"><span class="pending-inline">Link TBC</span></a>
+        </div>
+
+        <!-- ESCAPE THE MATRIX -->
+        <div style="background:var(--surface2);padding:2rem 1.75rem;position:relative;border-left:2px solid var(--red);">
+          <div style="position:absolute;top:-1px;left:1.75rem;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;background:var(--red);color:#fff;padding:4px 12px;">RECOMMENDED</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.1em;color:var(--red);text-transform:uppercase;margin-bottom:0.75rem;margin-top:0.5rem;">Membership</div>
+          <div style="font-family:'Playfair Display',serif;font-size:36px;color:var(--white);line-height:1;margin-bottom:0.25rem;"><span class="pending-inline" style="font-size:18px;">TBC</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gray);margin-bottom:1.5rem;">Escape The Matrix</div>
+          <ul style="list-style:none;font-size:15px;color:var(--mid);line-height:2.1;margin-bottom:1.75rem;">
+            <li style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red);font-size:13px;">→</span>Full course library</li>
+            <li style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red);font-size:13px;">→</span>Private community</li>
+            <li style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red);font-size:13px;">→</span>One-on-one calls</li>
+            <li style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red);font-size:13px;">→</span>New courses always included</li>
+          </ul>
+          <span class="btn-primary" onclick="showPage('pricing')" style="width:100%;justify-content:center;">Join Now ↗</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-strip">
+    <div class="container">
+      <h2>The mainstream won't save you.<br><em>But you can save yourself.</em></h2>
+      <p>The information, the tools, and the community to build a life that doesn't depend on institutions that were never designed with your interests at heart.</p>
+      <div class="cta-row">
+        <span class="btn-primary" onclick="showPage('pricing')">Join Escape The Matrix ↗</span>
+        <a class="btn-ghost" href="https://www.youtube.com/@NuggetsNews" target="_blank">Start free — watch on YouTube →</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo" style="margin-bottom:1rem;cursor:default;">
+            <div class="logo-mark">N</div>
+            <div class="logo-text">Nugget's News<span>INDEPENDENT MEDIA</span></div>
+          </div>
+          <p>Unfiltered coverage of world news, political corruption, health &amp; investing. Hosted by Alex Saunders.</p>
+        </div>
+        <div>
+          <div class="footer-col-title">Platform</div>
+          <ul class="footer-links">
+            <li><a onclick="showPage('home')">Home</a></li>
+            <li><a onclick="showPage('benefits')">Escape The Matrix</a></li>
+            <li><a onclick="showPage('pricing')">Support &amp; Pricing</a></li>
+            <li><a href="#">Member Login</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links">
+            <li><a onclick="showPage('about')">About Alex</a></li>
+            <li><a onclick="showPage('faq')">FAQ</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Follow</div>
+          <ul class="footer-links">
+            <li><a href="https://www.youtube.com/@NuggetsNews" target="_blank">▶ YouTube</a></li>
+            <li><a href="https://x.com/NuggetsNewsAU" target="_blank">𝕏 Twitter / X</a></li>
+            <li><a href="https://www.facebook.com/nuggetsnews" target="_blank">f Facebook</a></li>
+            <li><a href="#" target="_blank">◎ Instagram <span class="pending-inline" style="font-size:8px;">TBC</span></a></li>
+            <li><a href="#" target="_blank">◉ Podcast <span class="pending-inline" style="font-size:8px;">TBC</span></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">© 2026 Nugget's News. All rights reserved.</div>
+        <div class="footer-disclaimer">For informational purposes only. Does not constitute financial, medical, or legal advice. Always conduct your own research.</div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ═══════ BENEFITS ═══════ -->
+<div class="page-wrap" id="page-benefits">
+  <section class="inner-hero">
+    <div class="inner-hero-img" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80');"></div>
+    <div class="container inner-hero-content"><div class="eyebrow">Escape The Matrix</div><h1>Everything inside <em>Escape The Matrix.</em></h1><p>One subscription. Structured courses, a private community, and direct access to Alex and the team.</p></div>
+  </section>
+  <section class="section"><div class="container">
+    <div class="benefit-blocks">
+      <div class="benefit-block"><div class="benefit-num">01</div><div class="benefit-title">The Course Library</div><p class="benefit-desc">Deep-dive, step-by-step courses across every topic we cover. Built from first principles — no technical background required.</p></div>
+      <div class="benefit-block"><div class="benefit-num">02</div><div class="benefit-title">The Community</div><p class="benefit-desc">A private, members-only global community. Ask questions, share findings, and connect with people working toward the same kind of independence. Access the community through your Escape The Matrix member login and the private Facebook group.</p></div>
+      <div class="benefit-block"><div class="benefit-num">03</div><div class="benefit-title">Direct Access</div><p class="benefit-desc">Scheduled one-on-one calls with Alex and the team. Bring your specific questions — about your privacy setup, your financial situation, or anything you're working through. Real conversation, not a sales pitch.</p></div>
+    </div>
+  </div></section>
+  <div class="mid-banner">
+    <div class="mid-banner-bg" style="background-image:url('https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=1400&q=80');"></div>
+    <div class="mid-banner-content">
+      <div class="mid-banner-text">Deep-dive courses. One complete system.<br><em>Built to actually change how you live.</em></div>
+      <span class="btn-primary" onclick="showPage('pricing')">Join Now ↗</span>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div class="eyebrow">Course Categories</div>
+    <h2>Deep-dive courses. <em>One complete system.</em></h2>
+    <p style="font-size:15px;color:var(--muted);">From digital privacy to off-grid living — step by step.</p>
+    <div class="courses-grid">
+      <div class="course-card"><div class="course-icon">🛡</div><div class="course-name">OpSec 101</div><p class="course-desc">Cookies, permissions, VPNs, browser hygiene, and reducing your digital footprint.</p></div>
+      <div class="course-card"><div class="course-icon">🔐</div><div class="course-name">Privacy Tools</div><p class="course-desc">Proton suite, Payy crypto card, and a complete privacy stack for daily life.</p></div>
+      <div class="course-card"><div class="course-icon">₿</div><div class="course-name">Sound Money &amp; Crypto</div><p class="course-desc">Bitcoin fundamentals, wallet security, running your own node, ZEC and XMR.</p></div>
+      <div class="course-card"><div class="course-icon">🤖</div><div class="course-name">Decentralised AI</div><p class="course-desc">Self-hosting open-source models — OpenClaw, Hermes, Nous, Prime Intellect, FortyTwo.</p></div>
+      <div class="course-card"><div class="course-icon">⛓</div><div class="course-name">Decentralised Apps</div><p class="course-desc">DeFi, DePIN, decentralised social, storage, identity. Beginner to advanced.</p></div>
+      <div class="course-card"><div class="course-icon">🌿</div><div class="course-name">Off-Grid &amp; Self-Sufficiency</div><p class="course-desc">Energy, food, water, land. Practical independence — wherever you are.</p></div>
+      <div class="course-card"><div class="course-icon">💊</div><div class="course-name">Health &amp; Medical Freedom</div><p class="course-desc">Independent research and frameworks for your own informed health decisions.</p></div>
+      <div class="course-card"><div class="course-icon">🌐</div><div class="course-name">World News &amp; Corruption</div><p class="course-desc">Context and frameworks for events the mainstream covers badly — or not at all.</p></div>
+    </div>
+  </div></section>
+  <div class="cta-strip"><div class="container"><h2>Ready to <em>opt out?</em></h2><p>Join members from around the world already building lives that depend less on systems that weren't designed in their favour.</p><div class="cta-row"><span class="btn-primary" onclick="showPage('pricing')">Join Escape The Matrix ↗</span></div></div></div>
+  <footer class="site-footer"><div class="container"><div class="footer-bottom"><div class="footer-copy">© 2026 Nugget's News. All rights reserved.</div><div class="footer-disclaimer">Not financial, medical, or legal advice.</div></div></div></footer>
+</div>
+
+
+<!-- ═══════ PRICING ═══════ -->
+<div class="page-wrap" id="page-pricing">
+  <section class="inner-hero">
+    <div class="inner-hero-img" style="background-image:url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1400&q=80');"></div>
+    <div class="container inner-hero-content"><div class="eyebrow">Support &amp; Pricing</div><h1>Choose how you want to <em>be part of this.</em></h1><p>From free content to full membership — every option supports independent media and helps keep the work going.</p></div>
+  </section>
+  <div class="trust-bar">
+    <div class="trust-bar-inner container">
+      <div class="trust-item"><div class="trust-icon">📚</div><div class="trust-label">Courses</div><div class="trust-value">Growing</div><div class="trust-sub">New topics added regularly</div></div>
+      <div class="trust-item"><div class="trust-icon">🌍</div><div class="trust-label">Community</div><div class="trust-value">Global</div><div class="trust-sub">Private, members-only</div></div>
+      <div class="trust-item"><div class="trust-icon">🎙</div><div class="trust-label">1-on-1 Calls</div><div class="trust-value">Included</div><div class="trust-sub">Direct access to Alex</div></div>
+      <div class="trust-item"><div class="trust-icon">⚡</div><div class="trust-label">New Courses</div><div class="trust-value">Always</div><div class="trust-sub">Included as they drop</div></div>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1.4fr;gap:1px;background:var(--border);border:1px solid var(--border);">
+
+      <!-- FREE -->
+      <div style="background:var(--surface);padding:2.5rem 2rem;">
+        <div class="tier-name">Free</div>
+        <div class="tier-price">$0</div>
+        <div class="tier-period">Always free</div>
+        <ul class="tier-features">
+          <li>Full YouTube channel</li>
+          <li>Public podcast &amp; interviews</li>
+          <li>Free newsletter</li>
+        </ul>
+        <div class="tier-cta"><a class="btn-outline" href="https://www.youtube.com/@NuggetsNews" target="_blank">Watch on YouTube →</a></div>
+      </div>
+
+      <!-- BUY ME A COFFEE -->
+      <div style="background:var(--surface);padding:2.5rem 2rem;">
+        <div class="tier-name">One-Off</div>
+        <div class="tier-price" style="font-size:38px;">Coffee</div>
+        <div class="tier-period">Buy Me a Coffee</div>
+        <ul class="tier-features">
+          <li>One-time contribution</li>
+          <li>Keep independent media alive</li>
+          <li>No strings attached</li>
+        </ul>
+        <div class="tier-cta"><a class="btn-outline" href="#" target="_blank"><span class="pending-inline">Link TBC</span></a></div>
+      </div>
+
+      <!-- PATREON -->
+      <div style="background:var(--surface);padding:2.5rem 2rem;">
+        <div class="tier-name">Monthly</div>
+        <div class="tier-price" style="font-size:38px;">Patreon</div>
+        <div class="tier-period">Patreon</div>
+        <ul class="tier-features">
+          <li>Recurring monthly support</li>
+          <li>Early access to content</li>
+          <li>Direct connection with Alex</li>
+        </ul>
+        <div class="tier-cta"><a class="btn-outline" href="#" target="_blank"><span class="pending-inline">Link TBC</span></a></div>
+      </div>
+
+      <!-- ESCAPE THE MATRIX -->
+      <div style="background:var(--surface2);padding:2.5rem 2rem;position:relative;">
+        <div style="position:absolute;top:-1px;left:2rem;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;background:var(--red);color:#fff;padding:4px 12px;">RECOMMENDED</div>
+        <div class="tier-name" style="color:var(--red);margin-top:0.5rem;">Escape The Matrix</div>
+        <div class="tier-price"><span class="pending-inline">TBC</span></div>
+        <div class="tier-period"><span class="pending-inline">Billing period — confirm with Alex</span></div>
+        <ul class="tier-features">
+          <li>Full course library — all categories</li>
+          <li>Private community + Facebook group</li>
+          <li>One-on-one calls with Alex &amp; team</li>
+          <li>All future course drops included</li>
+          <li><strong style="color:var(--white);font-weight:500;">Cryptocurrency accepted</strong></li>
+        </ul>
+        <div class="tier-cta"><span class="btn-primary" style="width:100%;justify-content:center;">Join Escape The Matrix ↗</span></div>
+      </div>
+
+    </div>
+    <div class="pending-block" style="margin-top:1rem;">Cancellation policy — to be confirmed.</div>
+  </div></section>
+  <div class="cta-strip"><div class="container"><h2>The cost of <em>not knowing</em> is higher.</h2><div class="cta-row"><span class="btn-primary">Join Escape The Matrix ↗</span><a class="btn-ghost" href="https://www.youtube.com/@NuggetsNews" target="_blank">Start free on YouTube →</a></div></div></div>
+  <footer class="site-footer"><div class="container"><div class="footer-bottom"><div class="footer-copy">© 2026 Nugget's News. All rights reserved.</div><div class="footer-disclaimer">Not financial, medical, or legal advice.</div></div></div></footer>
+</div>
+
+
+<!-- ═══════ ABOUT ═══════ -->
+<div class="page-wrap" id="page-about">
+  <section class="inner-hero">
+    <div class="inner-hero-img" style="background-image:url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=1400&q=80');"></div>
+    <div class="container inner-hero-content"><div class="eyebrow">About</div><h1>Nugget's News is <em>independent</em> media.<br>No script. No agenda.</h1><p>Unfiltered coverage of world news, political corruption, health, and investing — hosted by Alex Saunders.</p></div>
+  </section>
+
+  <!-- CHANNEL STATS STRIP -->
+  <div class="trust-bar">
+    <div class="trust-bar-inner container">
+      <div class="trust-item"><div class="trust-icon">▶</div><div class="trust-label">YouTube</div><div class="trust-value">157K+</div><div class="trust-sub">Subscribers</div></div>
+      <div class="trust-item"><div class="trust-icon">👁</div><div class="trust-label">Total Views</div><div class="trust-value">14M+</div><div class="trust-sub">Since 2017</div></div>
+      <div class="trust-item"><div class="trust-icon">🎬</div><div class="trust-label">Videos</div><div class="trust-value">1,000+</div><div class="trust-sub">Published</div></div>
+      <div class="trust-item"><div class="trust-icon">📅</div><div class="trust-label">Independent</div><div class="trust-value">Since 2012</div><div class="trust-sub">No corporate backing</div></div>
+    </div>
+  </div>
+
+  <section class="section"><div class="container">
+    <div class="eyebrow">Alex's Story</div>
+    <div class="about-grid">
+      <div>
+        <div class="about-photo">
+          <img id="alex-photo"
+               src="https://drive.google.com/uc?export=view&id=1YhXQ6L2ViFwh3pyYAN3Dviz04fq3YGz1"
+               alt="Alex Saunders — Nugget's News"
+               onerror="this.style.display='none';document.getElementById('photo-fallback').style.display='flex';">
+          <div id="photo-fallback" class="about-photo-fallback" style="display:none;">
+            <div class="about-photo-fallback-pattern"></div>
+            <div class="about-initials">AS</div>
+          </div>
+          <div class="about-photo-caption">
+            <div class="about-photo-name">Alex Saunders</div>
+            <div class="about-photo-role">Founder &amp; Host — Nugget's News</div>
+          </div>
+        </div>
+        <div class="about-tag">Est. 2017 — Active since 2012</div>
+        <div class="dev-note" style="margin-top:1rem;">⚙ WEB DEV NOTE — PHOTO: Currently loading from Google Drive (shared link). For production, host the image locally or on a CDN and replace the src with a direct file path for faster load times and no dependency on Google Drive sharing permissions.</div>
+      </div>
+      <div class="about-text">
+        <h2>Lifelong researcher. Asking the questions others won't <em>since 2012.</em></h2>
+        <p>Alex Saunders — known as Nugget — is the founder and host of Nugget's News. An <strong>ex-pharmacist who quit in 2017</strong>, Alex had been actively speaking out about the failings of the financial and banking system since 2012, before launching the YouTube channel to take it public.</p>
+        <p>His focus has always been the same: sound money, health freedom, world news, privacy, self-sufficiency, and sovereignty. Helping people <strong>wake up to the reality of the world we live in</strong>, understand who's really running it, and reclaim their own sovereignty.</p>
+        <div class="about-pull"><p>"Trying to help people become the best version of themselves — wake up to what's really going on, who's really running the world, and reclaim our sovereignty."</p></div>
+        <p>Nugget's News has published more than 1,000 videos and reached over 14 million total views. Along the way, Alex has had more than 100 videos removed from YouTube — without a single explanation email from the platform.</p>
+        <p style="color:var(--mid);font-style:italic;">That's the point. When they start removing it, you know it matters.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- TIMELINE -->
+  <section class="section"><div class="container">
+    <div class="eyebrow">The Journey</div>
+    <h2>Over a decade of <em>asking the hard questions.</em></h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div><div class="timeline-year">2012</div><div class="timeline-label">THE BEGINNING</div></div>
+        <div><div class="timeline-title">Speaking out starts</div><div class="timeline-desc">Alex begins actively researching and speaking out about the failings of the global financial and banking system — years before most people were paying attention.</div></div>
+      </div>
+      <div class="timeline-item">
+        <div><div class="timeline-year">2017</div><div class="timeline-label">THE CHANNEL LAUNCHES</div></div>
+        <div><div class="timeline-title">Nugget's News goes public</div><div class="timeline-desc">Alex quits pharmacy and launches the YouTube channel to bring his research, interviews, and analysis to a broader audience. The channel covers everything from Bitcoin to world news and health freedom from day one.</div></div>
+      </div>
+      <div class="timeline-item">
+        <div><div class="timeline-year">2021+</div><div class="timeline-label">CENSORSHIP</div></div>
+        <div><div class="timeline-title">100+ videos removed — no explanation</div><div class="timeline-desc">YouTube removes over 100 Nugget's News videos and issues two channel strikes in 24 hours without a single email of explanation. The channel survives. The audience grows. The work continues.</div></div>
+      </div>
+      <div class="timeline-item">
+        <div><div class="timeline-year">Now</div><div class="timeline-label">ESCAPE THE MATRIX</div></div>
+        <div><div class="timeline-title">The platform launches</div><div class="timeline-desc">After more than a decade of research and reporting, Escape The Matrix brings the practical side together — courses, community, and direct access — all in one place for people who want to do more than just watch.</div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="container">
+    <div class="eyebrow">The Team</div>
+    <h2>The people behind it.</h2>
+    <div class="pending-block">Additional team members — names, roles, and bios to be added by Alex.</div>
+  </div></section>
+
+  <div class="cta-strip"><div class="container"><h2>This is news for people <em>who've stopped waiting.</em></h2><div class="cta-row"><span class="btn-primary" onclick="showPage('pricing')">Join Escape The Matrix ↗</span><a class="btn-ghost" href="https://www.youtube.com/@NuggetsNews" target="_blank">Watch free on YouTube →</a></div></div></div>
+  <footer class="site-footer"><div class="container"><div class="footer-bottom"><div class="footer-copy">© 2026 Nugget's News. All rights reserved.</div><div class="footer-disclaimer">Not financial, medical, or legal advice.</div></div></div></footer>
+</div>
+
+
+<!-- ═══════ FAQ ═══════ -->
+<div class="page-wrap" id="page-faq">
+  <section class="inner-hero">
+    <div class="inner-hero-img" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80');"></div>
+    <div class="container inner-hero-content"><div class="eyebrow">FAQ</div><h1>Got questions?<br><em>Here are the honest answers.</em></h1></div>
+  </section>
+  <section class="section"><div class="container" style="max-width:760px;">
+    <div class="faq-item open"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">What is Escape The Matrix?</span><span class="faq-arrow">+</span></div><div class="faq-answer">Escape The Matrix is the Nugget's News private membership platform. Your subscription gives you access to a growing course library, a private global community (through the member portal and private Facebook group), and one-on-one calls with Alex and the team.</div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">How is this different from the free YouTube channel?</span><span class="faq-arrow">+</span></div><div class="faq-answer">The YouTube channel is where we publish our reporting — the news, interviews, and analysis. Escape The Matrix is the practitioner's layer: structured courses, a focused community, and direct access to bring your specific questions.</div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">What topics are covered in the courses?</span><span class="faq-arrow">+</span></div><div class="faq-answer">OpSec and digital security, privacy tools, Bitcoin and sound money, privacy-focused cryptocurrencies, decentralised finance and applications, self-hosted AI, off-grid living, health and medical freedom, and world news and political corruption.</div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">Do I need to be technical to use this?</span><span class="faq-arrow">+</span></div><div class="faq-answer">Not at all. That's exactly what Escape The Matrix is here for. Every course is built from first principles — no prior knowledge assumed. Whether you've never heard of a VPN or don't know the difference between Bitcoin and a blockchain, the courses walk you through everything step by step. By the end, you'll be the one people ask.</div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">What does the one-on-one call include?</span><span class="faq-arrow">+</span></div><div class="faq-answer">Every membership includes access to scheduled one-on-one calls with Alex and the team. Bring your specific questions — privacy setup, financial situation, course content, or anything else. Use the member portal to book your session.</div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">Is this just about crypto?</span><span class="faq-arrow">+</span></div><div class="faq-answer">No. Crypto and sound money are one category among several. Escape The Matrix covers digital privacy, decentralised AI, off-grid living, health freedom, and world news and political corruption. Crypto is a tool for financial sovereignty — one piece of a much bigger picture.</div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">Is my data safe?</span><span class="faq-arrow">+</span></div><div class="faq-answer"><span class="pending-inline">Data and privacy policy — to be confirmed.</span></div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">Can I cancel my subscription?</span><span class="faq-arrow">+</span></div><div class="faq-answer"><span class="pending-inline">Cancellation terms — to be confirmed.</span></div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">Who is Alex Saunders?</span><span class="faq-arrow">+</span></div><div class="faq-answer">Alex Saunders — known as Nugget — is the founder and host of Nugget's News. An ex-pharmacist who quit in 2017, he has been researching and speaking out since 2012. Nugget's News has published more than 1,000 videos and reached over 14 million total views.</div></div>
+    <div class="faq-item"><div class="faq-q-row" onclick="toggleFaq(this)"><span class="faq-q-text">How do I get started?</span><span class="faq-arrow">+</span></div><div class="faq-answer">Click "Join Escape The Matrix" to see pricing and sign up. If you'd like to start free first, the YouTube channel is always open.</div></div>
+    <div style="margin-top:3rem;"><span class="btn-primary" onclick="showPage('pricing')">Join Escape The Matrix ↗</span></div>
+  </div></section>
+  <footer class="site-footer"><div class="container"><div class="footer-bottom"><div class="footer-copy">© 2026 Nugget's News. All rights reserved.</div><div class="footer-disclaimer">Not financial, medical, or legal advice. Always do your own research.</div></div></div></footer>
+</div>
+
+
+<script>
+// ─ HERO CANVAS PARTICLES ─
+(function() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.75;';
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+  hero.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  let W, H, dots = [];
+  const resize = () => { W = canvas.width = hero.offsetWidth; H = canvas.height = hero.offsetHeight; };
+  resize();
+  window.addEventListener('resize', resize);
+  for (let i = 0; i < 55; i++) dots.push({
+    x: Math.random(), y: Math.random(),
+    vx: (Math.random() - 0.5) * 0.0004,
+    vy: (Math.random() - 0.5) * 0.0003,
+    r: Math.random() * 1.5 + 0.5,
+    a: Math.random() * 0.5 + 0.15
+  });
+  const draw = () => {
+    ctx.clearRect(0, 0, W, H);
+    dots.forEach(d => {
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < 0) d.x = 1; if (d.x > 1) d.x = 0;
+      if (d.y < 0) d.y = 1; if (d.y > 1) d.y = 0;
+      ctx.beginPath();
+      ctx.arc(d.x * W, d.y * H, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(206,17,38,${d.a * 2})`;
+      ctx.fill();
+    });
+    dots.forEach((d, i) => {
+      dots.slice(i + 1).forEach(d2 => {
+        const dx = (d.x - d2.x) * W, dy = (d.y - d2.y) * H;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 130) {
+          ctx.beginPath();
+          ctx.moveTo(d.x * W, d.y * H);
+          ctx.lineTo(d2.x * W, d2.y * H);
+          ctx.strokeStyle = `rgba(206,17,38,${0.18 * (1 - dist / 130)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      });
+    });
+    requestAnimationFrame(draw);
+  };
+  draw();
+})();
+
+// ─ CLASSIFIED PANEL ANIMATION ─
+(function(){
+  const ids = ['cpr1','cpr2','cpr3','cpr4','cpr5'];
+  const totalDur = ids.length;
+  let current = 0;
+  let scrollLocked = false;
+
+  function revealNext(){
+    if(current >= ids.length) return;
+
+    const el = document.getElementById(ids[current]);
+    if(el) el.classList.add('revealed');
+    current++;
+
+    // Update progress bar
+    const prog = document.getElementById('cp-prog');
+    if(prog) prog.style.width = (current / (ids.length + 1) * 100) + '%';
+
+    // Update status label
+    const st = document.getElementById('cp-status');
+    if(st) st.textContent = current < ids.length ? 'DECLASSIFYING...' : 'DECLASSIFIED';
+
+    // Final reveal
+    if(current >= ids.length){
+      setTimeout(()=>{
+        const fl = document.getElementById('cp-final');
+        if(fl) fl.classList.add('visible');
+        const cl = document.getElementById('cp-class');
+        if(cl) cl.textContent = 'DECLASSIFIED';
+        const bs = document.getElementById('cp-big-stamp');
+        if(bs){ bs.textContent = 'DECLASSIFIED'; bs.classList.add('done'); }
+        const prog2 = document.getElementById('cp-prog');
+        if(prog2) prog2.style.width = '100%';
+        const hint = document.getElementById('cp-scroll-hint');
+        if(hint) hint.style.opacity = '0';
+      }, 350);
+    }
+  }
+
+  function onScroll(){
+    if(scrollLocked) return;
+    if(current >= ids.length) return;
+    scrollLocked = true;
+    revealNext();
+    setTimeout(()=>{ scrollLocked = false; }, 500);
+  }
+
+  // Trigger on wheel, touch swipe, and keyboard arrow/page keys
+  window.addEventListener('wheel', onScroll, { passive: true });
+  window.addEventListener('keydown', function(e){
+    if(['ArrowDown','ArrowUp','PageDown','PageUp','Space'].includes(e.key)) onScroll();
+  });
+
+  // Touch swipe
+  let touchStartY = 0;
+  window.addEventListener('touchstart', function(e){ touchStartY = e.touches[0].clientY; }, { passive: true });
+  window.addEventListener('touchend', function(e){
+    if(Math.abs(touchStartY - e.changedTouches[0].clientY) > 30) onScroll();
+  }, { passive: true });
+
+  // Hint pulse on the first bar so visitors know to scroll
+  setTimeout(()=>{
+    const first = document.getElementById('cpr1');
+    if(first && current === 0){
+      first.style.animation = 'redactPulse 1.2s ease-in-out 3';
+    }
+  }, 1200);
+})();
+
+// ─ PAGE SWITCHING ─
+function showPage(page) {
+  document.querySelectorAll('.page-wrap').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─ FAQ ACCORDION ─
+function toggleFaq(row) { row.parentElement.classList.toggle('open'); }
+
+// ─ FETCH VIDEO TITLES VIA YOUTUBE OEMBED ─
+const videos = [
+  { id: 'afCuMV7y1uo', elId: 'title-1' },
+  { id: 'GwkFV__vs04', elId: 'title-2' },
+  { id: 'ZZCXY9J3S5g', elId: 'title-3' }
+];
+videos.forEach(v => {
+  fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${v.id}&format=json`)
+    .then(r => r.json())
+    .then(data => {
+      const el = document.getElementById(v.elId);
+      if (el) el.textContent = data.title;
+    })
+    .catch(() => {
+      const el = document.getElementById(v.elId);
+      if (el) el.textContent = 'Watch on YouTube →';
+    });
+});
+
+// ─ LATEST VIDEOS VIA YOUTUBE RSS ─
+// Uses a public CORS proxy to fetch YouTube's RSS feed
+// WEB DEV: Replace with server-side fetch or YouTube Data API for production
+async function loadLatestVideos() {
+  const CHANNEL_ID = 'UCxxxxxxxYYYYYYYY'; // ← WEB DEV: Replace with actual channel ID
+  const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+  const PROXY = `https://api.allorigins.win/get?url=${encodeURIComponent(RSS_URL)}`;
+  const container = document.getElementById('latest-videos');
+
+  try {
+    const res = await fetch(PROXY);
+    const data = await res.json();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(data.contents, 'text/xml');
+    const entries = Array.from(xml.querySelectorAll('entry')).slice(0, 4);
+
+    if (!entries.length) throw new Error('No entries');
+
+    container.innerHTML = entries.map(entry => {
+      const videoId = entry.querySelector('videoId')?.textContent || '';
+      const title = entry.querySelector('title')?.textContent || 'Watch now';
+      const published = entry.querySelector('published')?.textContent || '';
+      const date = published ? new Date(published).toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' }) : '';
+      const link = `https://www.youtube.com/watch?v=${videoId}`;
+      const thumb = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+      return `
+        <a class="latest-card" href="${link}" target="_blank">
+          <div class="latest-thumb"><img src="${thumb}" alt="${title}" loading="lazy"></div>
+          <div class="latest-info">
+            <div class="latest-title">${title}</div>
+            <div class="latest-date">${date}</div>
+          </div>
+        </a>`;
+    }).join('');
+  } catch (e) {
+    container.innerHTML = `
+      <div class="latest-loading" style="grid-column:1/-1;">
+        <div>
+          <div class="loading-text" style="margin-bottom:0.75rem;">Latest videos — requires channel ID to auto-load.</div>
+          <a class="btn-ghost" href="https://www.youtube.com/@NuggetsNews" target="_blank" style="font-size:17px;">View all on YouTube →</a>
+        </div>
+      </div>`;
+  }
+}
+loadLatestVideos();
+</script>
+</body>
+</html>
